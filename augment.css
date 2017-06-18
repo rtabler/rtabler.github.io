@@ -1,0 +1,136 @@
+body {
+    background-color: #ccccff;
+    display: block;
+    position: relative;
+    margin: auto;
+    padding: 0;
+    font-family: MaestroTimes, serif;
+    font-style: bold;
+}
+
+h1 {
+    /*background-color: red;*/
+    margin: 0px;
+    text-align: center;
+    font-size: 40pt;
+}
+
+.block {
+    display: block;
+    margin: auto;
+}
+
+#starter, #starter:focus {
+    background-color: rgba(0,0,0,0.1);
+    display: block;
+    position: relative;
+    margin: auto;
+    width: 400px;
+    height: 45px;
+    border: none;
+    text-align: center;
+    outline: none;
+    opacity: 1;
+    transition: opacity 1s;
+}
+#soundbox {
+    /*background-color: red;*/
+    width: 200px;
+    height: 80px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+}
+#bassplate {
+    background-color: red;
+    width: 960px;
+    height: 200px;
+    box-sizing: border-box;
+}
+#input-keyboard {
+    background-color: orange;
+    position: relative;
+    width: 630px;
+    height: 150px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+} .input-key, .input-key:focus {
+    display: block;
+    position: absolute;
+    border-style: outset;
+    border-width: 3px;
+    outline: none;
+} .white-key {
+    background-color: white;
+    background-color: ivory;
+    height: 150px;
+    width: 90px;
+    color: black;
+} .white-label {
+    position: relative;
+    top: 42px;
+    font-size: 24pt;
+} .black-key {
+    background-color: black;
+    height: 90px;
+    width: 60px;
+    color: white;
+} .black-label {
+    position: relative;
+    font-size: 14pt;
+}
+
+#note-C  { left:   0px; }
+#note-CD { left:  50px; }
+#note-D  { left:  90px; }
+#note-DE { left: 160px; }
+#note-E  { left: 180px; }
+#note-F  { left: 270px; }
+#note-FG { left: 320px; }
+#note-G  { left: 360px; }
+#note-GA { left: 420px; }
+#note-A  { left: 450px; }
+#note-AB { left: 520px; }
+#note-B  { left: 540px; }
+
+#chordtype {
+    /*background-color: yellow;*/
+    display: webkit-flex;
+    display: flex;
+    height: 100px;
+    max-width: 960px;
+    margin-top: 10px;
+    margin-bottom: 10px;    
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+.testchord {
+    width: 100px;
+}
+.chordtypeButton, .chordtypeButton:focus {
+    /*background-color: red;*/
+    background-color: white;
+    background-color: ivory;
+    display: block;
+    width: 100px;
+    border-style: outset;
+    border-width: 3px;
+    outline: none;
+}
+#feedback {
+    /*background-color: green;*/
+    width: 630px;
+    height: 100px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-style: solid;
+    border-width: 4px;
+    border-color: black;
+    text-align: center;
+}
+#btNext {
+    visibility: hidden;
+    border-width: 2px;
+}
