@@ -102,21 +102,17 @@ var playChordFromNumbers = function(noteNumbers) {
 var playChord = function(root, quality, loop) {
     // Plays a chord for 2 seconds. Loops optionally.
     console.log("Inside playChord()");
-    console.log(root+" "+quality);
-    console.log(letterNoteToNumberNote);
-    console.log(qualityToNumberMap);
 
     // Convert root+quality to numbers
     var rootNumber = letterNoteToNumberNote[root];
-    console.log(rootNumber);
+    console.log(qualityToNumberMap);
+    console.log(quality);
     var chordNumbers = qualityToNumberMap[quality];
     console.log(chordNumbers);
     for (var i=0; i<chordNumbers.length; i++) {
         chordNumbers[i] += rootNumber;
         chordNumbers[i] = chordNumbers[i] % 12; // So that lowest note != root note
     }
-
-    console.log(chordNumbers);
 
     // Calculate all the note values that need to be played
     // given the number of octaves
