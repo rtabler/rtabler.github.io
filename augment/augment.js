@@ -1,5 +1,6 @@
 
 var currentInterval = -1;
+var currentChord = [];
 
 var qualityToNumberMap = {
     "maj"  : [0,4,7],
@@ -183,8 +184,10 @@ var gradeChordAndDoFeedback = function(root, quality) {
     }
 
     // Shows the button to play the next chord
-    $("#btRepeat").css("visibility,","visible");
-    $("#btNext").css("visibility","visible");
+    // $("#btRepeat").css("visibility,","visible");
+    // $("#btNext").css("visibility","visible");
+
+    $("#feedback").css("visibility","visible");
 }
 
 var bassBtnOnclick = function(root, quality) {
@@ -202,11 +205,13 @@ var bassBtnOnclick = function(root, quality) {
     gradeChordAndDoFeedback(root, quality);
 }
 var btRepeatOnclick = function() {
+    console.log(currentChord);
     // Called when the repeat chord button is pressed on the feedback panel.
     playChord(currentChord[0],currentChord[1],false); // doesn't loop
 }
 var btNextOnclick = function() {
     // Called when the next chord button is pressed on the feedback panel.
+    $("#feedback").css("visibility","hidden");
     newChord();
 }
 
