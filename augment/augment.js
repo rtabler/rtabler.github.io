@@ -175,7 +175,7 @@ var newChord = function() {
 var gradeChordAndDoFeedback = function(root, quality) {
     // Grades the root,quality guess, and displays the feedback
     if (root == currentChord[0] && quality == currentChord[1]) {
-        $("#feedback").html("Correct! The chord was "+currentChord[0]+" "+currentChord[1]+".");
+        $("#inner-feedback").html("Correct! The chord was "+currentChord[0]+" "+currentChord[1]+".");
         $("#feedback").css("background-color","#ccffcc");
     } else {
         $("#feedback").html("Incorrect. The chord was "+currentChord[0]+" "+currentChord[1]+".");
