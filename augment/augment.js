@@ -96,18 +96,14 @@ window.onload = function() {
             console.log(state, progress);
         },
         onsuccess: function() {
-            var delay = 0; // play one note every quarter second
-            var note = 50; // the MIDI note
-            var velocity = 127; // how hard the note hits
-            // play the note
-            MIDI.setVolume(0, 127);
-            MIDI.noteOn(0, note, velocity, delay);
-            MIDI.noteOff(0, note, delay + 0.75);
+            $("#starter").css("visibility","hidden");
+            $("#starter").css("opacity","1");
         }
     });
 }
 
 var firstChord = function() {
+    // Called when "click to begin" is pressed
     if (begun) return;
     begun = true;
     $("#starter").css("opacity","0");
@@ -115,11 +111,13 @@ var firstChord = function() {
 }
 
 var playChordFromNumbers = function(noteNumbers) {
+    // Given an array of note numbers, plays all the notes
+    var duration = 2.0;
     for (var i=0; i<noteNumbers.length; i++) {
         MIDI.noteOn(0, noteNumbers[i], 127, 0.0);
     }
     for (var i=0; i<noteNumbers.length; i++) {
-        MIDI.noteOff(0, noteNumbers[i], 2.0);
+        MIDI.noteOff(0, noteNumbers[i], duration);
     }
 }
 var playChordOnLoop = function(root, quality) {
@@ -132,7 +130,8 @@ var playChordOnLoop = function(root, quality) {
         chordNumbers[i] += rootNumber;
     }
 
-    // Play the chord at the given number of octaves
+    // Calculate all the note values that need to be played
+    // given the number of octaves
     var lowestC = 36;
     var octavesToPlay = 3;
     var notesToPlay = Array(octavesToPlay*chordNumbers.length);
@@ -144,28 +143,61 @@ var playChordOnLoop = function(root, quality) {
             notesToPlay[12*octave+i] = cn;
         }
     }
-    
+
+    // Play the chord every 2.1 seconds.
+    // Will be stopped when clearInterval(currentInterval) is called.
     currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
 }
+
 var chooseChord = function() {
+    // Chooses a random chord from the available roots and qualities
     var chosenChord = [
         chordRootsToTest[Math.floor(Math.random()*chordRootsToTest.length)],
         chordQualitiesToTest[Math.floor(Math.random()*chordQualitiesToTest.length)]
     ];
     return chosenChord;
 }
+
 var newChord = function() {
+    // If a chord is not yet playing, then randomly choose one
+    // and begin playing it
     if (chordIsPlaying) {
         return;
     }
     chordIsPlaying = true;
     currentChord = chooseChord();
     playChordOnLoop(currentChord[0],currentChord[1]);
-    // playChord(currentChord[0],currentChord[1]);
 }
+
+var gradeChord = function(root, quality) {
+    // Grades the root,quality guess, and displays the feedback
+    if (root == currentChord[0] && quality == currentChord[1]) {
+        $("#feedback").html("Correct! The chord was "+currentChord[0]+" "+currentChord[1]+".");
+        $("#feedback").css("background-color","#ccffcc");
+    } else {
+        $("#feedback").html("Incorrect. The chord was "+currentChord[0]+" "+currentChord[1]+".");
+        $("#feedback").css("background-color","#ffcccc");
+    }
+
+    // Shows the button to play the next chord
+    $("btNext").css("visibility","visible");
+}
+
 var bassBtnOnclick = function(root, quality) {
+    // Called when one of the bass buttons is pressed.
+
+    // Nothing to do if no chord is playing yet
     if (!chordIsPlaying) {
         return;
     }
+
+    // Stops the chord from continuing to play
     clearInterval(currentInterval);
+
+    gradeChord(root, quality);
 }
+
+
+
+
+
