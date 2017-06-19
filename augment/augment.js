@@ -1,3 +1,4 @@
+var av
 var qualityToNumberMap = {
     "maj"  : [0,4,7],
     "min"  : [0,3,7],
@@ -21,6 +22,14 @@ var letterNoteToNumberNote = {
     "A#" : 10, "Bb" : 10,
     "B"  : 11
 }
+console.log($(document));
+
+var chordQualitiesToTest = ["maj","min","dom7"];
+var chordRootsToTest = ['Ab','Eb','Bb','F','C','G','D','A','E','B']
+
+var bassBtnSize = 50;
+var bassBtnSpacing = 15;
+
 // Define chords
 // var notes = ['C', '-', 'D', '-', 'E', 'F', '-', 'G', '-', 'A', '-', 'B'];
 // var noteNumToLetter = {0:'C',1:'CD',2:'D',3:'DE',4:'E',5:'F',6:'FG',7:'G',8:'GA',9:'A',10:'AB',11:'B'}
@@ -43,12 +52,6 @@ var letterNoteToNumberNote = {
 
 // console.log($("test"));
 
-console.log($(document));
-
-var chordQualitiesToTest = ["maj","min","dom7"];
-var chordRootsToTest = ['Ab','Eb','Bb','F','C','G','D','A','E','B']
-var bassBtnSize = 50;
-var bassBtnSpacing = 15;
 
 
 $("#bassplate").css("background-color", "yellow");
@@ -110,12 +113,19 @@ var firstChord = function() {
 }
 
 var playChord = function(root, quality) {
+    // Plays a chord for 2 seconds
+
+    // this should not be here later
     playingChord = true;
+
+    // Convert root+quality to numbers
     var rootNumber = letterNoteToNumberNote[root];
     var chordNumbers = qualityToNumberMap[quality];
     for (var i=0; i<chordNumbers.length; i++) {
         chordNumbers[i] += rootNumber;
-    }    
+    }
+
+    // Play the chord at the given number of octaves
     var lowestC = 36;
     var octavesToPlay = 3;
     var notesToTurnOff = Array(octavesToPlay*chordNumbers.length);
@@ -132,7 +142,11 @@ var playChord = function(root, quality) {
     }
 }
 var chooseChord = function() {
-    return ["D","maj"];
+    var chosenChord = [
+        chordRootsToTest[Math.floor(Math.random()*chordRootsToTest.length)],
+        chordQualitiesToTest[Math.floor(Math.random()*chordQualitiesToTest.length)]
+    ];
+    return chosenChord;
 }
 var newChord = function() {
     if (playingChord) {
