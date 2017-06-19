@@ -91,12 +91,12 @@ var newChord = function() {
         return;
     }
     MIDI.setVolume(0,127);
-    MIDI.noteOn(0, 48, 127, 0);
-    MIDI.noteOn(0, 52, 127, 0);
-    MIDI.noteOn(0, 55, 127, 0);
-    MIDI.noteOff(0, 48, 2.0);
-    MIDI.noteOff(0, 52, 2.0);
-    MIDI.noteOff(0, 55, 2.0);
+    MIDI.noteOn(2, 48, 127, 0);
+    MIDI.noteOn(2, 52, 127, 0);
+    MIDI.noteOn(2, 55, 127, 0);
+    MIDI.noteOff(2, 48, 2.0);
+    MIDI.noteOff(2, 52, 2.0);
+    MIDI.noteOff(2, 55, 2.0);
 }
 var bassBtnOnclick = function(root, quality) {
     if (!playingChord) {
