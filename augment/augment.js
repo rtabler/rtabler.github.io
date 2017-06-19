@@ -106,9 +106,10 @@ var playChord = function(root, quality, loop) {
     // Convert root+quality to numbers
     var rootNumber = letterNoteToNumberNote[root];
     console.log(qualityToNumberMap);
-    console.log(quality);
+    // console.log(quality);
     var chordNumbers = qualityToNumberMap[quality];
-    console.log(chordNumbers);
+    console.log(qualityToNumberMap);
+    // console.log(chordNumbers);
     for (var i=0; i<chordNumbers.length; i++) {
         chordNumbers[i] += rootNumber;
         chordNumbers[i] = chordNumbers[i] % 12; // So that lowest note != root note
