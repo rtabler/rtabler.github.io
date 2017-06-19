@@ -196,7 +196,6 @@ var bassBtnOnclick = function(root, quality) {
     gradeChordAndDoFeedback(root, quality);
 }
 var btRepeatOnclick = function() {
-    console.log(currentChord);
     // Called when the repeat chord button is pressed on the feedback panel.
     playChord(currentChord[0],currentChord[1],false); // doesn't loop
 }
