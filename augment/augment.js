@@ -1,4 +1,26 @@
-
+var qualityToNumberMap = {
+    "maj"  : [0,4,7],
+    "min"  : [0,3,7],
+    "dom7" : [0,4,7,10],
+    "maj7" : [0,4,7,11],
+    "min7" : [0,3,7,10],
+    "dim7" : [0,3,9], // also 6
+    "hdim7": [0,3,6,8]
+}
+var letterNoteToNumberNote = {
+    "C"  : 0,
+    "C#" : 1, "Db" : 1,
+    "D"  : 2,
+    "D#" : 3, "Eb" : 3,
+    "E"  : 4,
+    "F"  : 5,
+    "F#" : 6, "Gb" : 6,
+    "G"  : 7,
+    "G#" : 8, "Ab" : 8,
+    "A"  : 9,
+    "A#" : 10, "Bb" : 10,
+    "B"  : 11
+}
 // Define chords
 // var notes = ['C', '-', 'D', '-', 'E', 'F', '-', 'G', '-', 'A', '-', 'B'];
 // var noteNumToLetter = {0:'C',1:'CD',2:'D',3:'DE',4:'E',5:'F',6:'FG',7:'G',8:'GA',9:'A',10:'AB',11:'B'}
@@ -86,17 +108,32 @@ var firstChord = function() {
     $("#starter").css("opacity","0");
     newChord();
 }
+
+var playChord = function(root, quality) {
+    playingChord = true;
+    var rootNumber = letterNoteToNumberNote[root];
+    var chordNumbers = [rootNumber+numberNote for numberNote in qualityToNumberMap[quality]]
+    
+    var lowestC = 36;
+    var octavesToPlay = 3;
+    var notesToTurnOff = Array(octavesToPlay*chordNumbers.length);
+    for (octave=0; octave<octavesToPlay; octave++) {
+        for (var i=0; i<chordNumbers.length; i++) {
+            cn = chordNumbers[i];
+            cn += lowestC + octave * 12;
+            MIDI.noteOn(0, cn, 127, 0.0);
+            notesToTurnOff[12*octave+i] = cn;
+        }
+    }
+    for (var i=0; i<notesToTurnOff.length; i++) {
+        MIDI.noteOff(0, notesToTurnOff[i], 2.0);
+    }
+}
 var newChord = function() {
     if (playingChord) {
         return;
     }
-    MIDI.setVolume(0,127);
-    MIDI.noteOn(1, 48, 127, 0);
-    MIDI.noteOn(1, 52, 127, 0);
-    MIDI.noteOn(1, 55, 127, 0);
-    MIDI.noteOff(1, 48, 2.0);
-    MIDI.noteOff(1, 52, 2.0);
-    MIDI.noteOff(1, 55, 2.0);
+    playChord("D","maj");
 }
 var bassBtnOnclick = function(root, quality) {
     if (!playingChord) {
