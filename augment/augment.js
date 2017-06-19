@@ -127,6 +127,7 @@ var playChord = function(root, quality, loop) {
             notesToPlay[chordNumbers.length*octave+i] = cn;
         }
     }
+    console.log(notesToPlay);
 
     // Play the chord every 2.1 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
