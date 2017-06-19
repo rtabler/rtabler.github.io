@@ -103,6 +103,8 @@ var playChord = function(root, quality, loop) {
     // Plays a chord for 2 seconds. Loops optionally.
     console.log("Inside playChord()");
     console.log(root+" "+quality);
+    console.log(letterNoteToNumberNote);
+    console.log(qualityToNumberMap);
 
     // Convert root+quality to numbers
     var rootNumber = letterNoteToNumberNote[root];
