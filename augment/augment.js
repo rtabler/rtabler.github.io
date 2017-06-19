@@ -96,7 +96,7 @@ window.onload = function() {
             console.log(state, progress);
         },
         onsuccess: function() {
-            $("#starter").css("visibility","hidden");
+            $("#starter").css("visibility","visible");
             $("#starter").css("opacity","1");
         }
     });
