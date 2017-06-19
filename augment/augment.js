@@ -119,7 +119,7 @@ var playChord = function(root, quality, loop) {
         for (var i=0; i<chordNumbers.length; i++) {
             cn = chordNumbers[i];
             cn += lowestC + octave * 12;
-            notesToPlay[12*octave+i] = cn;
+            notesToPlay[chordNumbers.length*octave+i] = cn;
         }
     }
     console.log(notesToPlay);
@@ -128,6 +128,8 @@ var playChord = function(root, quality, loop) {
     // Will be stopped when clearInterval(currentInterval) is called.
     if (loop) {
         currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
+    } else {
+        playChordFromNumbers(notesToPlay);
     }
 }
 var chooseChord = function() {
