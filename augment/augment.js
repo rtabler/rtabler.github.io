@@ -3,7 +3,7 @@
 
 
 // Settings
-var chordQualitiesToTest = ["maj","min","dom7"];
+var chordQualitiesToTest = ["maj","min"];//,"dom7"];
 var chordRootsToTest = ['Ab','Eb','Bb','F','C','G','D','A','E','B']
 // Settings that won't change much
 var bassBtnSize = 50;
