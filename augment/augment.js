@@ -114,6 +114,7 @@ var playChord = function(root, quality, loop) {
         chordNumbers[i] += rootNumber;
         chordNumbers[i] = chordNumbers[i] % 12; // So that lowest note != root note
     }
+    console.log(chordNumbers);
 
     // Calculate all the note values that need to be played
     // given the number of octaves
