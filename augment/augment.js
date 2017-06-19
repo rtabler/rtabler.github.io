@@ -17,13 +17,13 @@ var currentChord = []; // [root, quality] currently playing chord
 
 // Global data / lookup
 var qualityToNumberMap = {
-    "maj"  : [0,4,7],
-    "min"  : [0,3,7],
-    "dom7" : [0,4,7,10],
-    "maj7" : [0,4,7,11],
-    "min7" : [0,3,7,10],
-    "dim7" : [0,3,9], // also 6
-    "hdim7": [0,3,6,8]
+    maj  : [0,4,7],
+    min  : [0,3,7],
+    dom7 : [0,4,7,10],
+    maj7 : [0,4,7,11],
+    min7 : [0,3,7,10],
+    dim7 : [0,3,9], // also 6
+    hdim7: [0,3,6,8]
 }
 var letterNoteToNumberNote = {
     "C"  : 0,
