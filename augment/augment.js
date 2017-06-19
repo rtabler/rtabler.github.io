@@ -1,4 +1,6 @@
-var av
+
+var currentInterval = -1;
+
 var qualityToNumberMap = {
     "maj"  : [0,4,7],
     "min"  : [0,3,7],
@@ -83,7 +85,7 @@ $(".bass-btn").css("border-radius","100px");
 // $(document).ready(function(){
 // });
 var begun = false;
-var playingChord = false;
+var chordIsPlaying = false;
 
 
 window.onload = function() {
@@ -112,11 +114,16 @@ var firstChord = function() {
     newChord();
 }
 
-var playChord = function(root, quality) {
+var playChordFromNumbers = function(noteNumbers) {
+    for (var i=0; i<noteNumbers.length; i++) {
+        MIDI.noteOn(0, noteNumbers[i], 127, 0.0);
+    }
+    for (var i=0; i<noteNumbers.length; i++) {
+        MIDI.noteOff(0, noteNumbers[i], 2.0);
+    }
+}
+var playChordOnLoop = function(root, quality) {
     // Plays a chord for 2 seconds
-
-    // this should not be here later
-    playingChord = true;
 
     // Convert root+quality to numbers
     var rootNumber = letterNoteToNumberNote[root];
@@ -128,18 +135,17 @@ var playChord = function(root, quality) {
     // Play the chord at the given number of octaves
     var lowestC = 36;
     var octavesToPlay = 3;
+    var notesToPlay = Array(octavesToPlay*chordNumbers.length);
     var notesToTurnOff = Array(octavesToPlay*chordNumbers.length);
     for (octave=0; octave<octavesToPlay; octave++) {
         for (var i=0; i<chordNumbers.length; i++) {
             cn = chordNumbers[i];
             cn += lowestC + octave * 12;
-            MIDI.noteOn(0, cn, 127, 0.0);
-            notesToTurnOff[12*octave+i] = cn;
+            notesToPlay[12*octave+i] = cn;
         }
     }
-    for (var i=0; i<notesToTurnOff.length; i++) {
-        MIDI.noteOff(0, notesToTurnOff[i], 2.0);
-    }
+    
+    currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
 }
 var chooseChord = function() {
     var chosenChord = [
@@ -149,15 +155,17 @@ var chooseChord = function() {
     return chosenChord;
 }
 var newChord = function() {
-    if (playingChord) {
+    if (chordIsPlaying) {
         return;
     }
-    chosenChord = chooseChord();
-    playChord(chosenChord[0],chosenChord[1]);
+    chordIsPlaying = true;
+    currentChord = chooseChord();
+    playChordOnLoop(currentChord[0],currentChord[1]);
+    // playChord(currentChord[0],currentChord[1]);
 }
 var bassBtnOnclick = function(root, quality) {
-    if (!playingChord) {
+    if (!chordIsPlaying) {
         return;
     }
-
+    clearInterval(currentInterval);
 }
