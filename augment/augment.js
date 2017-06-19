@@ -16,28 +16,33 @@ var currentInterval = -1; // nonzero if chord is looping
 var currentChord = []; // [root, quality] currently playing chord
 
 // Global data / lookup
-var qualityToNumberMap = {
-    maj  : [0,4,7],
-    min  : [0,3,7],
-    dom7 : [0,4,7,10],
-    maj7 : [0,4,7,11],
-    min7 : [0,3,7,10],
-    dim7 : [0,3,9], // also 6
-    hdim7: [0,3,6,8]
+var qualityToNumberMap = function(q) {
+    if      (q==="maj"  ) return [0,4,7];
+    else if (q==="min"  ) return [0,3,7];
+    else if (q==="dom7" ) return [0,4,7,10];
+    else if (q==="maj7" ) return [0,4,7,11];
+    else if (q==="min7" ) return [0,3,7,10];
+    else if (q==="dim7" ) return [0,3,9]; // also 6
+    else if (q==="hdim7") return [0,3,6,8];
 }
-var letterNoteToNumberNote = {
-    "C"  : 0,
-    "C#" : 1,  "Db" : 1,
-    "D"  : 2,
-    "D#" : 3,  "Eb" : 3,
-    "E"  : 4,
-    "F"  : 5,
-    "F#" : 6,  "Gb" : 6,
-    "G"  : 7,
-    "G#" : 8,  "Ab" : 8,
-    "A"  : 9,
-    "A#" : 10, "Bb" : 10,
-    "B"  : 11
+var letterNoteToNumberNote = function(l) {
+    if      (l==="C"  ) return 0;
+    else if (l==="C#" ) return 1;
+    else if (l==="Db" ) return 1;
+    else if (l==="D"  ) return 2;
+    else if (l==="D#" ) return 3;
+    else if (l==="Eb" ) return 3;
+    else if (l==="E"  ) return 4;
+    else if (l==="F"  ) return 5;
+    else if (l==="F#" ) return 6;
+    else if (l==="Gb" ) return 6;
+    else if (l==="G"  ) return 7;
+    else if (l==="G#" ) return 8;
+    else if (l==="Ab" ) return 8;
+    else if (l==="A"  ) return 9;
+    else if (l==="A#" ) return 10;
+    else if (l==="Bb" ) return 10;
+    else if (l==="B"  ) return 11;
 }
 
 
@@ -103,8 +108,8 @@ var playChord = function(root, quality, loop) {
     // Plays a chord for 2 seconds. Loops optionally.
 
     // Convert root+quality to numbers
-    var rootNumber = letterNoteToNumberNote[root];
-    var chordNumbers = qualityToNumberMap[quality];
+    var rootNumber = letterNoteToNumberNote(root);
+    var chordNumbers = qualityToNumberMap(quality);
     for (var i=0; i<chordNumbers.length; i++) {
         chordNumbers[i] += rootNumber;
         chordNumbers[i] = chordNumbers[i] % 12; // So that lowest note != root note
