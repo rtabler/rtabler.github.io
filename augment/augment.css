@@ -133,6 +133,6 @@ h1 {
     visibility: hidden;
 }
 #btNext {
-    visibility: hidden;
+    /*visibility: hidden;*/
     border-width: 2px;
 }

@@ -1,7 +1,21 @@
+// Augment
+// Copyright © Ryan Tabler
 
-var currentInterval = -1;
-var currentChord = [];
 
+// Settings
+var chordQualitiesToTest = ["maj","min","dom7"];
+var chordRootsToTest = ['Ab','Eb','Bb','F','C','G','D','A','E','B']
+// Settings that won't change much
+var bassBtnSize = 50;
+var bassBtnSpacing = 15;
+
+// Global state variables
+var begun = false;
+var chordIsPlaying = false;
+var currentInterval = -1; // nonzero if chord is looping
+var currentChord = []; // [root, quality] currently playing chord
+
+// Global data / lookup
 var qualityToNumberMap = {
     "maj"  : [0,4,7],
     "min"  : [0,3,7],
@@ -13,50 +27,40 @@ var qualityToNumberMap = {
 }
 var letterNoteToNumberNote = {
     "C"  : 0,
-    "C#" : 1, "Db" : 1,
+    "C#" : 1,  "Db" : 1,
     "D"  : 2,
-    "D#" : 3, "Eb" : 3,
+    "D#" : 3,  "Eb" : 3,
     "E"  : 4,
     "F"  : 5,
-    "F#" : 6, "Gb" : 6,
+    "F#" : 6,  "Gb" : 6,
     "G"  : 7,
-    "G#" : 8, "Ab" : 8,
+    "G#" : 8,  "Ab" : 8,
     "A"  : 9,
     "A#" : 10, "Bb" : 10,
     "B"  : 11
 }
-console.log($(document));
-
-var chordQualitiesToTest = ["maj","min","dom7"];
-var chordRootsToTest = ['Ab','Eb','Bb','F','C','G','D','A','E','B']
-
-var bassBtnSize = 50;
-var bassBtnSpacing = 15;
-
-// Define chords
-// var notes = ['C', '-', 'D', '-', 'E', 'F', '-', 'G', '-', 'A', '-', 'B'];
-// var noteNumToLetter = {0:'C',1:'CD',2:'D',3:'DE',4:'E',5:'F',6:'FG',7:'G',8:'GA',9:'A',10:'AB',11:'B'}
-// var major = [[0, 4, 7],"maj"];
-// var minor = [[0, 3, 7],"min"];
-// var dom7 = [[0, 4, 7, 10],"dom7"];
-// var maj7 = [[0, 4, 7, 11],"maj7"];
-// var min7 = [[0, 3, 7, 10],"min7"];
-// var dim7 = [[0, 3, 9],"dim7"]; // also 6
-// var hdim7 = [[0, 3, 6, 8],"hdim7"];
-// var chordsTier1 = [major, minor];
-// var chordsTier2 = [dom7];
-// var chordsTier3 = [dim7];
-// var chordsTier4 = [maj7, hdim7];
-// var chordTiersToTest = [chordsTier1,chordsTier2];
-// var chordTypesToTest = [];
-// for (var i=0; i<chordTiersToTest.length; i++) {
-//     chordTypesToTest = chordTypesToTest.concat(chordTiersToTest[i]);
-// }
-
-// console.log($("test"));
 
 
 
+// Load MIDI resources
+window.onload = function() {
+    MIDI.loadPlugin({
+        soundfontUrl: "MIDI.js-master/examples/soundfont/",
+        instrument: "acoustic_grand_piano",
+        onprogress: function(state, progress) {
+            // console.log(state, progress);
+            return;
+        },
+        onsuccess: function() {
+            $("#starter").css("visibility","visible");
+            $("#starter").css("opacity","1");
+        }
+    });
+}
+
+
+
+// Draw the parts of the UI that depend on settings
 $("#bassplate").css("background-color", "yellow");
 // Create bassplate and bass buttons
 $("#bassplate").css("box-sizing","border-box");
@@ -83,35 +87,8 @@ $(".bass-btn").css("border-radius","100px");
 // $("#bassplate").append("<button>But</button>");
 
 
-// $(document).ready(function(){
-// });
-var begun = false;
-var chordIsPlaying = false;
 
-
-window.onload = function() {
-    MIDI.loadPlugin({
-        soundfontUrl: "MIDI.js-master/examples/soundfont/",
-        instrument: "acoustic_grand_piano",
-        onprogress: function(state, progress) {
-            // console.log(state, progress);
-            return;
-        },
-        onsuccess: function() {
-            $("#starter").css("visibility","visible");
-            $("#starter").css("opacity","1");
-        }
-    });
-}
-
-var firstChord = function() {
-    // Called when "click to begin" is pressed
-    if (begun) return;
-    begun = true;
-    $("#starter").css("opacity","0");
-    newChord();
-}
-
+// Functions for playing chords
 var playChordFromNumbers = function(noteNumbers) {
     // Given an array of note numbers, plays all the notes
     var duration = 2.0;
@@ -130,6 +107,7 @@ var playChord = function(root, quality, loop) {
     var chordNumbers = qualityToNumberMap[quality];
     for (var i=0; i<chordNumbers.length; i++) {
         chordNumbers[i] += rootNumber;
+        chordNumbers[i] = chordNumbers[i] % 12; // So that lowest note != root note
     }
 
     // Calculate all the note values that need to be played
@@ -137,7 +115,6 @@ var playChord = function(root, quality, loop) {
     var lowestC = 36;
     var octavesToPlay = 3;
     var notesToPlay = Array(octavesToPlay*chordNumbers.length);
-    var notesToTurnOff = Array(octavesToPlay*chordNumbers.length);
     for (octave=0; octave<octavesToPlay; octave++) {
         for (var i=0; i<chordNumbers.length; i++) {
             cn = chordNumbers[i];
@@ -145,6 +122,7 @@ var playChord = function(root, quality, loop) {
             notesToPlay[12*octave+i] = cn;
         }
     }
+    console.log(notesToPlay);
 
     // Play the chord every 2.1 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
@@ -152,7 +130,6 @@ var playChord = function(root, quality, loop) {
         currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
     }
 }
-
 var chooseChord = function() {
     // Chooses a random chord from the available roots and qualities
     var chosenChord = [
@@ -161,7 +138,6 @@ var chooseChord = function() {
     ];
     return chosenChord;
 }
-
 var newChord = function() {
     // If a chord is not yet playing, then randomly choose one
     // and begin playing it
@@ -172,7 +148,15 @@ var newChord = function() {
     currentChord = chooseChord();
     playChord(currentChord[0],currentChord[1],true); // loops
 }
+var firstChord = function() {
+    // Called when "click to begin" is pressed
+    if (begun) return;
+    begun = true;
+    $("#starter").css("opacity","0");
+    newChord();
+}
 
+// Functions for user feedback
 var gradeChordAndDoFeedback = function(root, quality) {
     // Grades the root,quality guess, and displays the feedback
     if (root == currentChord[0] && quality == currentChord[1]) {
@@ -190,6 +174,7 @@ var gradeChordAndDoFeedback = function(root, quality) {
     $("#feedback").css("visibility","visible");
 }
 
+// Button functions
 var bassBtnOnclick = function(root, quality) {
     // Called when one of the bass buttons is pressed.
 
