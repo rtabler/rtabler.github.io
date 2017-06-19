@@ -93,7 +93,8 @@ window.onload = function() {
         soundfontUrl: "MIDI.js-master/examples/soundfont/",
         instrument: "acoustic_grand_piano",
         onprogress: function(state, progress) {
-            console.log(state, progress);
+            // console.log(state, progress);
+            return;
         },
         onsuccess: function() {
             $("#starter").css("visibility","visible");
@@ -120,8 +121,8 @@ var playChordFromNumbers = function(noteNumbers) {
         MIDI.noteOff(0, noteNumbers[i], duration);
     }
 }
-var playChordOnLoop = function(root, quality) {
-    // Plays a chord for 2 seconds
+var playChord = function(root, quality, loop) {
+    // Plays a chord for 2 seconds. Loops optionally.
 
     // Convert root+quality to numbers
     var rootNumber = letterNoteToNumberNote[root];
@@ -146,7 +147,9 @@ var playChordOnLoop = function(root, quality) {
 
     // Play the chord every 2.1 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
-    currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
+    if (loop) {
+        currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
+    }
 }
 
 var chooseChord = function() {
@@ -166,10 +169,10 @@ var newChord = function() {
     }
     chordIsPlaying = true;
     currentChord = chooseChord();
-    playChordOnLoop(currentChord[0],currentChord[1]);
+    playChord(currentChord[0],currentChord[1],true); // loops
 }
 
-var gradeChord = function(root, quality) {
+var gradeChordAndDoFeedback = function(root, quality) {
     // Grades the root,quality guess, and displays the feedback
     if (root == currentChord[0] && quality == currentChord[1]) {
         $("#feedback").html("Correct! The chord was "+currentChord[0]+" "+currentChord[1]+".");
@@ -180,7 +183,8 @@ var gradeChord = function(root, quality) {
     }
 
     // Shows the button to play the next chord
-    $("btNext").css("visibility","visible");
+    $("#btRepeat").css("visibility,","visible");
+    $("#btNext").css("visibility","visible");
 }
 
 var bassBtnOnclick = function(root, quality) {
@@ -193,10 +197,18 @@ var bassBtnOnclick = function(root, quality) {
 
     // Stops the chord from continuing to play
     clearInterval(currentInterval);
+    chordIsPlaying = false;
 
-    gradeChord(root, quality);
+    gradeChordAndDoFeedback(root, quality);
 }
-
+var btRepeatOnclick = function() {
+    // Called when the repeat chord button is pressed on the feedback panel.
+    playChord(currentChord[0],currentChord[1],false); // doesn't loop
+}
+var btNextOnclick = function() {
+    // Called when the next chord button is pressed on the feedback panel.
+    newChord();
+}
 
 
 
