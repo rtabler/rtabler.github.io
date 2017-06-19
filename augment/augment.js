@@ -112,8 +112,10 @@ var firstChord = function() {
 var playChord = function(root, quality) {
     playingChord = true;
     var rootNumber = letterNoteToNumberNote[root];
-    var chordNumbers = [rootNumber+numberNote for numberNote in qualityToNumberMap[quality]]
-    
+    var chordNumbers = qualityToNumberMap[quality];
+    for (var i=0; i<chordNumbers.length; i++) {
+        chordNumbers[i] += rootNumber;
+    }    
     var lowestC = 36;
     var octavesToPlay = 3;
     var notesToTurnOff = Array(octavesToPlay*chordNumbers.length);
@@ -129,11 +131,15 @@ var playChord = function(root, quality) {
         MIDI.noteOff(0, notesToTurnOff[i], 2.0);
     }
 }
+var chooseChord = function() {
+    return ["D","maj"];
+}
 var newChord = function() {
     if (playingChord) {
         return;
     }
-    playChord("D","maj");
+    chosenChord = chooseChord();
+    playChord(chosenChord[0],chosenChord[1]);
 }
 var bassBtnOnclick = function(root, quality) {
     if (!playingChord) {
