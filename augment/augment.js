@@ -178,7 +178,7 @@ var gradeChordAndDoFeedback = function(root, quality) {
         $("#inner-feedback").html("Correct! The chord was "+currentChord[0]+" "+currentChord[1]+".");
         $("#feedback").css("background-color","#ccffcc");
     } else {
-        $("#feedback").html("Incorrect. The chord was "+currentChord[0]+" "+currentChord[1]+".");
+        $("#inner-feedback").html("Incorrect. The chord was "+currentChord[0]+" "+currentChord[1]+".");
         $("#feedback").css("background-color","#ffcccc");
     }
 
