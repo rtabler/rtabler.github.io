@@ -60,16 +60,8 @@ $(".bass-btn").css("border-radius","100px");
 var begun = false;
 var playingChord = false;
 
-var firstChord = function() {
-    if (begun) return;
-    begun = true;
-    $("#starter").css("opacity","0");
-    newChord();
-}
-var newChord = function() {
-    if (playingChord) {
-        return;
-    }
+
+window.onload = function() {
     MIDI.loadPlugin({
         soundfontUrl: "MIDI.js-master/examples/soundfont/",
         instrument: "acoustic_grand_piano",
@@ -87,9 +79,24 @@ var newChord = function() {
         }
     });
 }
+
+var firstChord = function() {
+    if (begun) return;
+    begun = true;
+    $("#starter").css("opacity","0");
+    newChord();
+}
+var newChord = function() {
+    if (playingChord) {
+        return;
+    }
+    MIDI.setVolume(0,127);
+    MIDI.noteOn(0, 48, 127, 0);
+    MIDI.noteOff(0, 48, 1.0);
+}
 var bassBtnOnclick = function(root, quality) {
     if (!playingChord) {
         return;
     }
-
+    
 }
