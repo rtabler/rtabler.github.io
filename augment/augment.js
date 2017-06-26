@@ -186,8 +186,9 @@ var gradeChordAndDoFeedback = function(root, quality) {
 var bassBtnOnclick = function(root, quality) {
     // Called when one of the bass buttons is pressed.
 
-    // Nothing to do if no chord is playing yet
+    // If nothing is playing yet, then play the chord for the button pressed
     if (!chordIsPlaying) {
+        playChord(root,quality,false); // doesn't loop
         return;
     }
 
