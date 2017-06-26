@@ -118,7 +118,7 @@ var playChord = function(root, quality, loop) {
 
     // Calculate all the note values that need to be played
     // given the number of octaves
-    var lowestC = 36;
+    var lowestC = 48;
     var octavesToPlay = 3;
     var notesToPlay = Array(octavesToPlay*chordNumbers.length);
     for (octave=0; octave<octavesToPlay; octave++) {
