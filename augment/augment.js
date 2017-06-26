@@ -3,8 +3,8 @@
 
 
 // Settings
-var chordQualitiesToTest = ["maj","min"];//,"dom7"];
-var chordRootsToTest = ['Ab','Eb','Bb','F','C','G','D','A','E','B']
+var chordQualitiesToTest = ["maj","min","dom7"];//,"dom7"];
+var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B']
 // Settings that won't change much
 var bassBtnSize = 50;
 var bassBtnSpacing = 15;
@@ -78,7 +78,7 @@ for (i=0; i<chordQualitiesToTest.length; i++) {
         var newButtonId = "bass-btn-"+chordRootsToTest[j]+"-"+chordQualitiesToTest[i]+"";
         var newButtonOnclick = "bassBtnOnclick(\'"+chordRootsToTest[j]+"\',\'"+chordQualitiesToTest[i]+"\')";
         $("#bassplate").append("<button id=\""+newButtonId+"\" class=\"bass-btn\" onclick=\""+newButtonOnclick+"\">"+chordRootsToTest[j]+chordQualitiesToTest[i]+"</button>");
-        $("#"+newButtonId).css("background-color","red");
+        $("#"+newButtonId).css("background-color","pink");
         // $("#"+newButtonId).text("con");
         $("#"+newButtonId).css("display","block");
         $("#"+newButtonId).css("position","absolute");
