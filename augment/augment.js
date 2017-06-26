@@ -4,7 +4,7 @@
 
 // Settings
 var chordQualitiesToTest = ["maj","min","dom7"];//,"dom7"];
-var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B']
+var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#']
 // Settings that won't change much
 var bassBtnSize = 50;
 var bassBtnSpacing = 15;
