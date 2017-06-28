@@ -4,7 +4,7 @@
 
 // Settings
 var chordQualitiesToTest = ["maj","min","dom7"];//,"dom7"];
-var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','Fs'];
+var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#'];
 // Settings that won't change much
 var bassBtnSize = 50;
 var bassBtnSpacing = 15;
@@ -27,19 +27,24 @@ var qualityToNumberMap = function(q) {
 }
 var letterNoteToNumberNote = function(l) {
     if      (l==="C"  ) return 0;
+    else if (l==="Cs" ) return 1;
     else if (l==="C#" ) return 1;
     else if (l==="Db" ) return 1;
     else if (l==="D"  ) return 2;
+    else if (l==="Ds" ) return 3;
     else if (l==="D#" ) return 3;
     else if (l==="Eb" ) return 3;
     else if (l==="E"  ) return 4;
     else if (l==="F"  ) return 5;
     else if (l==="Fs" ) return 6;
+    else if (l==="F#" ) return 6;
     else if (l==="Gb" ) return 6;
     else if (l==="G"  ) return 7;
+    else if (l==="Gs" ) return 8;
     else if (l==="G#" ) return 8;
     else if (l==="Ab" ) return 8;
     else if (l==="A"  ) return 9;
+    else if (l==="As" ) return 10;
     else if (l==="A#" ) return 10;
     else if (l==="Bb" ) return 10;
     else if (l==="B"  ) return 11;
@@ -75,7 +80,8 @@ $("#bassplate").width(chordRootsToTest.length*(bassBtnSize+bassBtnSpacing)+bassB
 $("#bassplate").css("position","relative");
 for (i=0; i<chordQualitiesToTest.length; i++) {
     for (j=0; j<chordRootsToTest.length; j++) {
-        var newButtonId = "bass-btn-"+chordRootsToTest[j]+"-"+chordQualitiesToTest[i]+"";
+        var cssFriendlyRootNote = (chordRootsToTest[j][-1]=='#')? chordRootsToTest[j][0]+'s' : chordRootsToTest[j];
+        var newButtonId = "bass-btn-"+cssFriendlyRootNote+"-"+chordQualitiesToTest[i]+"";
         var newButtonOnclick = "bassBtnOnclick(\'"+chordRootsToTest[j]+"\',\'"+chordQualitiesToTest[i]+"\')";
         $("#bassplate").append("<button id=\""+newButtonId+"\" class=\"bass-btn\" onclick=\""+newButtonOnclick+"\">"+chordRootsToTest[j]+chordQualitiesToTest[i]+"</button>");
         $("#"+newButtonId).css("background-color","pink");
