@@ -4,7 +4,7 @@
 
 // Settings
 var chordQualitiesToTest = ["maj","min","dom7"];//,"dom7"];
-var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#']
+var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','Fs'];
 // Settings that won't change much
 var bassBtnSize = 50;
 var bassBtnSpacing = 15;
@@ -34,7 +34,7 @@ var letterNoteToNumberNote = function(l) {
     else if (l==="Eb" ) return 3;
     else if (l==="E"  ) return 4;
     else if (l==="F"  ) return 5;
-    else if (l==="F#" ) return 6;
+    else if (l==="Fs" ) return 6;
     else if (l==="Gb" ) return 6;
     else if (l==="G"  ) return 7;
     else if (l==="G#" ) return 8;
