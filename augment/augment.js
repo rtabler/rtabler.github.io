@@ -80,7 +80,7 @@ $("#bassplate").width(chordRootsToTest.length*(bassBtnSize+bassBtnSpacing)+bassB
 $("#bassplate").css("position","relative");
 for (i=0; i<chordQualitiesToTest.length; i++) {
     for (j=0; j<chordRootsToTest.length; j++) {
-        var cssFriendlyRootNote = (chordRootsToTest[j][-1]=='#')? chordRootsToTest[j][0]+'s' : chordRootsToTest[j];
+        var cssFriendlyRootNote = (chordRootsToTest[j].substr(-1)=='#')? chordRootsToTest[j].substr(0,1)+'s' : chordRootsToTest[j];
         var newButtonId = "bass-btn-"+cssFriendlyRootNote+"-"+chordQualitiesToTest[i]+"";
         var newButtonOnclick = "bassBtnOnclick(\'"+chordRootsToTest[j]+"\',\'"+chordQualitiesToTest[i]+"\')";
         $("#bassplate").append("<button id=\""+newButtonId+"\" class=\"bass-btn\" onclick=\""+newButtonOnclick+"\">"+chordRootsToTest[j]+chordQualitiesToTest[i]+"</button>");
