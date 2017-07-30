@@ -364,15 +364,15 @@ var bassBtnOnclick = function(root, quality) {
         return;
     }
 
-    // Stops the chord from continuing to play
-    clearInterval(currentInterval);
-    chordIsPlaying = false;
-
     currentGuess.push([root,quality]);
     $("#vs-"+currentGuessIndex).html(""+root+quality);
     currentGuessIndex++;
 
     if (currentGuessIndex > 3) {
+        // Stops the chord from continuing to play
+        clearInterval(currentInterval);
+        chordIsPlaying = false;
+    
         gradeChordProgressionAndDoFeedback();
         currentGuessIndex = 0;
     }
