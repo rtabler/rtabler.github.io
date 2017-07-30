@@ -59,9 +59,29 @@ var letterNoteToNumberNote = function(l) {
     else if (l==="B"  ) return 11;
     else if (l==="Cb" ) return 11;
 }
-var numberNoteToLetterNote = function(n) {
+var numberNoteToLetterNote = function(n,p) {
     if      (n=== 0) return 'C';
-    else if (n=== 1) return ;
+    else if (n=== 2) return 'D';
+    else if (n=== 4) return 'E';
+    else if (n=== 5) return 'F';
+    else if (n=== 7) return 'G';
+    else if (n=== 9) return 'A';
+    else if (n===11) return 'B';
+    else if (p==='#') {
+        if      (n=== 1) return 'C#';
+        else if (n=== 3) return 'D#';
+        else if (n=== 6) return 'F#';
+        else if (n=== 8) return 'G#';
+        else if (n===10) return 'A#';
+    }
+    else if (p==='b') {
+        if      (n=== 1) return 'Db';
+        else if (n=== 3) return 'Eb';
+        else if (n=== 6) return 'Gb';
+        else if (n=== 8) return 'Ab';
+        else if (n===10) return 'Bb';
+    }
+    return 'Z';
 }
 
 
@@ -233,9 +253,16 @@ var getDerivativeChords = function(baseChord) {
     // Calculate the derivative chords of that equivalent major chord
     var derivativeChords = [[5,'maj'],[0,'maj'],[7,'maj'],[7,'dom7'],
                             [2,'min'],[9,'min'],[4,'min']];
+    var accidentalPreference;
+    if (rootNumber===7 || rootNumber===2  || rootNumber===9 ||
+        rootNumber===4 || rootNumber===11 || rootNumber===6 ) {
+        accidentalPreference = '#';
+    } else {
+        accidentalPreference = 'b';
+    }
     for (var i=0; i<derivativeChords.length; i++) {
         derivativeChords[i][0] = (derivativeChords[i][0] + rootNumber) % 12;
-        derivativeChords[i][0] = numberNoteToLetterNote(derivativeChords[i][0]);
+        derivativeChords[i][0] = numberNoteToLetterNote(derivativeChords[i][0], accidentalPreference);
     }
 
     return derivativeChords;
@@ -339,7 +366,7 @@ var bassBtnOnclick = function(root, quality) {
     $("#vs-"+currentGuessIndex).html(""+root+quality);
     currentGuessIndex++;
 
-    if (currentGuessIndex >= 3) {
+    if (currentGuessIndex > 3) {
         gradeChordProgressionAndDoFeedback();
         currentGuessIndex = 0;
     }
@@ -354,6 +381,7 @@ var btNextOnclick = function() {
     $("#feedback").css("visibility","hidden");
     // newChord();
     for (var i=0; i<4; i++) {
+        $("#vs-"+i).html("");
         $("#vs-"+i).css("background-color","white");
     }
     newChordProgression();
