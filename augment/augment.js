@@ -326,9 +326,11 @@ var gradeChordAndDoFeedback = function(root, quality) {
 }
 var gradeChordProgressionAndDoFeedback = function() {
     for (var i=0; i<4; i++) {
-        if (letterNoteToNumberNote(currentGuess[i][0]===
-            letterNoteToNumberNote(currentChordProgression[i][0])) &&
-            currentGuess[i][1]===currentChordProgression[i][1]) {
+        var guessRoot = letterNoteToNumberNote(currentGuess[i][0]);
+        var guessQuality = currentGuess[i][1];
+        var correctRoot = letterNoteToNumberNote(currentChordProgression[i][0]);
+        var correctQuality = currentChordProgression[i][1];
+        if (guessRoot===correctRoot && guessQuality===correctQuality) {
             $("#vs-"+i).css("background-color","#ccffcc");
         } else {
             $("#vs-"+i).css("background-color","#ffcccc");
