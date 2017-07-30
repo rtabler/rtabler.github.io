@@ -267,6 +267,8 @@ var newChordProgression = function() {
         chordsToPlay.push(derivativeChords[Math.floor(Math.random()*derivativeChords.length)]);
     }
 
+    console.log(chordsToPlay);
+
     // Play those 4 chords on loop
     currentChordProgression = chordsToPlay;
     playChordProgression(currentChordProgression,true); // loops
@@ -335,6 +337,7 @@ var bassBtnOnclick = function(root, quality) {
 
     currentGuess.push([root,quality]);
     $("#vs-"+currentGuessIndex).html(""+root+quality);
+    currentGuessIndex++;
 
     if (currentGuessIndex >= 3) {
         gradeChordProgressionAndDoFeedback();
