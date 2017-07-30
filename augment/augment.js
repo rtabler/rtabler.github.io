@@ -326,7 +326,9 @@ var gradeChordAndDoFeedback = function(root, quality) {
 }
 var gradeChordProgressionAndDoFeedback = function() {
     for (var i=0; i<4; i++) {
-        if (currentGuess[i] == currentChordProgression[i]) {
+        if (letterNoteToNumberNote(currentGuess[i][0]===
+            letterNoteToNumberNote(currentChordProgression[i][0])) &&
+            currentGuess[i][1]===currentChordProgression[i][1]) {
             $("#vs-"+i).css("background-color","#ccffcc");
         } else {
             $("#vs-"+i).css("background-color","#ffcccc");
@@ -361,6 +363,10 @@ var bassBtnOnclick = function(root, quality) {
         playChord(root,quality,false); // doesn't loop
         return;
     }
+
+    // Stops the chord from continuing to play
+    clearInterval(currentInterval);
+    chordIsPlaying = false;
 
     currentGuess.push([root,quality]);
     $("#vs-"+currentGuessIndex).html(""+root+quality);
