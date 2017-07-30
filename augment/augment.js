@@ -4,7 +4,8 @@
 
 // Settings
 var chordQualitiesToTest = ["maj","min","dom7"];
-var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#'];
+var chordRootsToTest   =      ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#'];
+var chordButtonsToShow = ['Gb','Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#','C#','G#','D#','A#'];
 // Settings that won't change much
 var bassBtnSize = 50;
 var bassBtnSpacing = 15;
@@ -14,6 +15,9 @@ var begun = false;
 var chordIsPlaying = false;
 var currentInterval = -1; // nonzero if chord is looping
 var currentChord = []; // [root, quality] currently playing chord
+var currentGuess = [];
+var currentGuessIndex = 0;
+var currentChordProgression = [];
 
 // Global data / lookup
 var qualityToNumberMap = function(q) {
@@ -26,7 +30,9 @@ var qualityToNumberMap = function(q) {
     else if (q==="hdim7") return [0,3,6,8];
 }
 var letterNoteToNumberNote = function(l) {
-    if      (l==="C"  ) return 0;
+    if      (l==="Bs" ) return 0;
+    else if (l==="B#" ) return 0;
+    else if (l==="C"  ) return 0;
     else if (l==="Cs" ) return 1;
     else if (l==="C#" ) return 1;
     else if (l==="Db" ) return 1;
@@ -35,6 +41,9 @@ var letterNoteToNumberNote = function(l) {
     else if (l==="D#" ) return 3;
     else if (l==="Eb" ) return 3;
     else if (l==="E"  ) return 4;
+    else if (l==="Fb" ) return 4;
+    else if (l==="Es" ) return 5;
+    else if (l==="E#" ) return 5;
     else if (l==="F"  ) return 5;
     else if (l==="Fs" ) return 6;
     else if (l==="F#" ) return 6;
@@ -48,14 +57,19 @@ var letterNoteToNumberNote = function(l) {
     else if (l==="A#" ) return 10;
     else if (l==="Bb" ) return 10;
     else if (l==="B"  ) return 11;
+    else if (l==="Cb" ) return 11;
+}
+var numberNoteToLetterNote = function(n) {
+    if      (n=== 0) return 'C';
+    else if (n=== 1) return ;
 }
 
 
 
 // Load MIDI resources
 window.onload = function() {
-    $("#visualizer").css("opacity","1");
-    return;
+    // $("#visualizer").css("opacity","1");
+    // return;
     MIDI.loadPlugin({
         soundfontUrl: "MIDI.js-master/examples/soundfont/",
         instrument: "acoustic_grand_piano",
@@ -64,7 +78,7 @@ window.onload = function() {
             return;
         },
         onsuccess: function() {
-            $("#visualizer").css("visibility","visible");
+            // $("#visualizer").css("visibility","visible");
             $("#visualizer").css("opacity","1");
         }
     });
@@ -80,15 +94,15 @@ $("#bassplate").css("background-color", "yellow");
 // Create bassplate and bass buttons
 $("#bassplate").css("box-sizing","border-box");
 $("#bassplate").height(chordQualitiesToTest.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
-$("#bassplate").width(chordRootsToTest.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
+$("#bassplate").width(chordButtonsToShow.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
 // $("#bassplate").width(bassBtnSize+"px")
 $("#bassplate").css("position","relative");
 for (i=0; i<chordQualitiesToTest.length; i++) {
-    for (j=0; j<chordRootsToTest.length; j++) {
-        var cssFriendlyRootNote = (chordRootsToTest[j].substr(-1)=='#')? chordRootsToTest[j].substr(0,1)+'s' : chordRootsToTest[j];
+    for (j=0; j<chordButtonsToShow.length; j++) {
+        var cssFriendlyRootNote = (chordButtonsToShow[j].substr(-1)=='#')? chordButtonsToShow[j].substr(0,1)+'s' : chordButtonsToShow[j];
         var newButtonId = "bass-btn-"+cssFriendlyRootNote+"-"+chordQualitiesToTest[i]+"";
-        var newButtonOnclick = "bassBtnOnclick(\'"+chordRootsToTest[j]+"\',\'"+chordQualitiesToTest[i]+"\')";
-        $("#bassplate").append("<button id=\""+newButtonId+"\" class=\"bass-btn\" onclick=\""+newButtonOnclick+"\">"+chordRootsToTest[j]+chordQualitiesToTest[i]+"</button>");
+        var newButtonOnclick = "bassBtnOnclick(\'"+chordButtonsToShow[j]+"\',\'"+chordQualitiesToTest[i]+"\')";
+        $("#bassplate").append("<button id=\""+newButtonId+"\" class=\"bass-btn\" onclick=\""+newButtonOnclick+"\">"+chordButtonsToShow[j]+chordQualitiesToTest[i]+"</button>");
         $("#"+newButtonId).css("background-color","pink");
         // $("#"+newButtonId).text("con");
         $("#"+newButtonId).css("display","block");
@@ -169,12 +183,12 @@ var playChord = function(root, quality, loop) {
         playChordFromNumbers(notesToPlay);
     }
 }
-var playChordProgression = function(chordProgression, currentChordIndex, loop) {
-    // var currentChord = chordProgression[currentChordIndex]
-    // playChord(,false);
+var playChordProgression = function(chordProgression, loop) {
+    // Play a chord progression on a loop
+
     // Convert root+quality into numbers
     var chordProgressionNumbers = [];
-    for (int i=0; i<chordProgression.length; i++) {
+    for (var i=0; i<chordProgression.length; i++) {
         var chord = chordProgression[i];
         var numbers = chord2numbers(chord[0],chord[1]);
         chordProgressionNumbers.push(numbers);
@@ -183,8 +197,8 @@ var playChordProgression = function(chordProgression, currentChordIndex, loop) {
     // Calculate all the note values that need to be played
     // given the number of octaves
     var noteSetSet = [];
-    for (int i=0; i<chordProgressionNumbers.length; i++) {
-        noteSetSet.push(expandNumbersAcrossOctaves(chordNumbers, 48, 3));
+    for (var i=0; i<chordProgressionNumbers.length; i++) {
+        noteSetSet.push(expandNumbersAcrossOctaves(chordProgressionNumbers[i], 48, 3));
     }
 
     // Play chord progression every 6 seconds.
@@ -203,6 +217,29 @@ var chooseChord = function() {
     ];
     return chosenChord;
 }
+var getDerivativeChords = function(baseChord) {
+    // Determine all available derivative chords
+
+    var root = baseChord[0];
+    var quality = baseChord[1];
+
+    // Find the root number of the equivalent major chord
+    var rootNumber = letterNoteToNumberNote(root);
+    if      (quality == 'maj' ) { rootNumber += 0; }
+    else if (quality == 'min' ) { rootNumber += 3; }
+    else if (quality == 'dom7') { rootNumber += 5; }
+    else { conosle.log("Chosen chord quality must be (maj/min/dom7) to derive chords."); }
+
+    // Calculate the derivative chords of that equivalent major chord
+    var derivativeChords = [[5,'maj'],[0,'maj'],[7,'maj'],[7,'dom7'],
+                            [2,'min'],[9,'min'],[4,'min']];
+    for (var i=0; i<derivativeChords.length; i++) {
+        derivativeChords[i][0] = (derivativeChords[i][0] + rootNumber) % 12;
+        derivativeChords[i][0] = numberNoteToLetterNote(derivativeChords[i][0]);
+    }
+
+    return derivativeChords;
+}
 var newChord = function() {
     // If a chord is not yet playing, then randomly choose one
     // and begin playing it
@@ -214,17 +251,25 @@ var newChord = function() {
     playChord(currentChord[0],currentChord[1],true); // loops
 }
 var newChordProgression = function() {
+    // Choose, calculate, and start playing a new chord progression
+
+    // Do nothing is a chord is already playing
     if (chordIsPlaying) {
         return;
     }
+    chordIsPlaying = true;
+
+    // Choose a chord, find derivative chords, then randomly pick 4
     var baseChord = chooseChord();
     var derivativeChords = getDerivativeChords(baseChord);
-    var chordsToPlay;
-    for (int i=0; i<4; i++) {
+    var chordsToPlay = [];
+    for (var i=0; i<4; i++) {
         chordsToPlay.push(derivativeChords[Math.floor(Math.random()*derivativeChords.length)]);
     }
-    chordIsPlaying = true;
-    playChordProgression(chordsToPlay,0,true); // loops
+
+    // Play those 4 chords on loop
+    currentChordProgression = chordsToPlay;
+    playChordProgression(currentChordProgression,true); // loops
 }
 var firstChord = function() {
     // Called when "click to begin" is pressed
@@ -244,16 +289,27 @@ var gradeChordAndDoFeedback = function(root, quality) {
         $("#inner-feedback").html("Incorrect. The chord was "+currentChord[0]+" "+currentChord[1]+".");
         $("#feedback").css("background-color","#ffcccc");
     }
-
     // Shows the button to play the next chord
-    // $("#btRepeat").css("visibility,","visible");
-    // $("#btNext").css("visibility","visible");
+    $("#btRepeat").css("visibility,","visible");
+    $("#btNext").css("visibility","visible");
 
     $("#feedback").css("visibility","visible");
 }
+var gradeChordProgressionAndDoFeedback = function() {
+    for (var i=0; i<4; i++) {
+        if (currentGuess[i] == currentChordProgression[i]) {
+            $("#vs-"+i).css("background-color","#ccffcc");
+        } else {
+            $("#vs-"+i).css("background-color","#ffcccc");
+        }
+    }
+    // Shows the button to play the next chord
+    $("#btRepeat").css("visibility,","visible");
+    $("#btNext").css("visibility","visible");
+}
 
 // Button functions
-var bassBtnOnclick = function(root, quality) {
+var _bassBtnOnclick = function(root, quality) {
     // Called when one of the bass buttons is pressed.
 
     // If nothing is playing yet, then play the chord for the button pressed
@@ -268,13 +324,35 @@ var bassBtnOnclick = function(root, quality) {
 
     gradeChordAndDoFeedback(root, quality);
 }
+var bassBtnOnclick = function(root, quality) {
+    // Called when one of the bass buttons is pressed.
+
+    // If nothing is playing yet, then play the chord for the button pressed
+    if (!chordIsPlaying) {
+        playChord(root,quality,false); // doesn't loop
+        return;
+    }
+
+    currentGuess.push([root,quality]);
+    $("#vs-"+currentGuessIndex).html(""+root+quality);
+
+    if (currentGuessIndex >= 3) {
+        gradeChordProgressionAndDoFeedback();
+        currentGuessIndex = 0;
+    }
+}
 var btRepeatOnclick = function() {
     // Called when the repeat chord button is pressed on the feedback panel.
-    playChord(currentChord[0],currentChord[1],false); // doesn't loop
+    // playChord(currentChord[0],currentChord[1],false); // doesn't loop
+    playChordProgression(currentChordProgression,false); // doesn't loop
 }
 var btNextOnclick = function() {
     // Called when the next chord button is pressed on the feedback panel.
     $("#feedback").css("visibility","hidden");
+    // newChord();
+    for (var i=0; i<4; i++) {
+        $("#vs-"+i).css("background-color","white");
+    }
     newChordProgression();
 }
 
