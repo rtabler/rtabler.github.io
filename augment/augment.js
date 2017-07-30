@@ -3,7 +3,7 @@
 
 
 // Settings
-var chordQualitiesToTest = ["maj","min","dom7","dim7"];//,"dom7"];
+var chordQualitiesToTest = ["maj","min","dom7"];
 var chordRootsToTest = ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#'];
 // Settings that won't change much
 var bassBtnSize = 50;
@@ -54,6 +54,8 @@ var letterNoteToNumberNote = function(l) {
 
 // Load MIDI resources
 window.onload = function() {
+    $("#visualizer").css("opacity","1");
+    return;
     MIDI.loadPlugin({
         soundfontUrl: "MIDI.js-master/examples/soundfont/",
         instrument: "acoustic_grand_piano",
@@ -62,14 +64,17 @@ window.onload = function() {
             return;
         },
         onsuccess: function() {
-            $("#starter").css("visibility","visible");
-            $("#starter").css("opacity","1");
+            $("#visualizer").css("visibility","visible");
+            $("#visualizer").css("opacity","1");
         }
     });
 }
 
 
-
+for (var i=0; i<4; i++) {
+    $("#vs-"+i).css("background-color","white");
+    $("#vs-"+i).css("left",(i*125)+"px");
+}
 // Draw the parts of the UI that depend on settings
 $("#bassplate").css("background-color", "yellow");
 // Create bassplate and bass buttons
@@ -110,31 +115,51 @@ var playChordFromNumbers = function(noteNumbers) {
         MIDI.noteOff(0, noteNumbers[i], duration);
     }
 }
-var playChord = function(root, quality, loop) {
-    // Plays a chord for 2 seconds. Loops optionally.
-
-    // Convert root+quality to numbers
+var playChordProgressionFromNumbers = function(chordNumbers) {
+    // Plays a sequence of chords
+    var duration = 1.0; // for each chord
+    for (var i=0; i<chordNumbers.length; i++) {
+        var noteNumbers = chordNumbers[i];
+        for (var j=0; j<noteNumbers.length; j++) {
+            MIDI.noteOn(0, noteNumbers[j], 127, i*duration);
+        }
+        for (var j=0; j<noteNumbers.length; j++) {
+            MIDI.noteOff(0, noteNumbers[j], (i+1)*duration);
+        }
+    }
+}
+var chord2numbers = function(root, quality) {
+    // Converts ['C','maj'] into [0,4,7]
     var rootNumber = letterNoteToNumberNote(root);
     var chordNumbers = qualityToNumberMap(quality);
     for (var i=0; i<chordNumbers.length; i++) {
         chordNumbers[i] += rootNumber;
         chordNumbers[i] = chordNumbers[i] % 12; // So that lowest note != root note
     }
-    console.log(chordNumbers);
-
-    // Calculate all the note values that need to be played
-    // given the number of octaves
-    var lowestC = 48;
-    var octavesToPlay = 3;
-    var notesToPlay = Array(octavesToPlay*chordNumbers.length);
-    for (octave=0; octave<octavesToPlay; octave++) {
+    return chordNumbers;
+}
+var expandNumbersAcrossOctaves = function(chordNumbers, lowestC, octaves) {
+    // Given chord numbers 0 to 11, calculates every note that needs to be
+    // played when playing over multiple octaves
+    var notesToPlay = Array(octaves*chordNumbers.length);
+    for (octave=0; octave<octaves; octave++) {
         for (var i=0; i<chordNumbers.length; i++) {
-            cn = chordNumbers[i];
+            var cn = chordNumbers[i];
             cn += lowestC + octave * 12;
             notesToPlay[chordNumbers.length*octave+i] = cn;
         }
     }
-    console.log(notesToPlay);
+    return notesToPlay;
+}
+var playChord = function(root, quality, loop) {
+    // Plays a chord for 2 seconds. Loops optionally.
+
+    // Convert [root,quality] to numbers
+    var chordNumbers = chord2numbers(root, quality);
+
+    // Calculate all the note values that need to be played
+    // given the number of octaves
+    var notesToPlay = expandNumbersAcrossOctaves(chordNumbers, 48, 3);
 
     // Play the chord every 2.1 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
@@ -142,6 +167,32 @@ var playChord = function(root, quality, loop) {
         currentInterval = setInterval(playChordFromNumbers, 2100, notesToPlay);
     } else {
         playChordFromNumbers(notesToPlay);
+    }
+}
+var playChordProgression = function(chordProgression, currentChordIndex, loop) {
+    // var currentChord = chordProgression[currentChordIndex]
+    // playChord(,false);
+    // Convert root+quality into numbers
+    var chordProgressionNumbers = [];
+    for (int i=0; i<chordProgression.length; i++) {
+        var chord = chordProgression[i];
+        var numbers = chord2numbers(chord[0],chord[1]);
+        chordProgressionNumbers.push(numbers);
+    }
+
+    // Calculate all the note values that need to be played
+    // given the number of octaves
+    var noteSetSet = [];
+    for (int i=0; i<chordProgressionNumbers.length; i++) {
+        noteSetSet.push(expandNumbersAcrossOctaves(chordNumbers, 48, 3));
+    }
+
+    // Play chord progression every 6 seconds.
+    // Will be stopped when clearInterval(currentInterval) is called.
+    if (loop) {
+        currentInterval = setInterval(playChordProgressionFromNumbers, 6000, noteSetSet);
+    } else {
+        playChordProgressionFromNumbers(chordProgressionNumbers);
     }
 }
 var chooseChord = function() {
@@ -162,12 +213,25 @@ var newChord = function() {
     currentChord = chooseChord();
     playChord(currentChord[0],currentChord[1],true); // loops
 }
+var newChordProgression = function() {
+    if (chordIsPlaying) {
+        return;
+    }
+    var baseChord = chooseChord();
+    var derivativeChords = getDerivativeChords(baseChord);
+    var chordsToPlay;
+    for (int i=0; i<4; i++) {
+        chordsToPlay.push(derivativeChords[Math.floor(Math.random()*derivativeChords.length)]);
+    }
+    chordIsPlaying = true;
+    playChordProgression(chordsToPlay,0,true); // loops
+}
 var firstChord = function() {
     // Called when "click to begin" is pressed
     if (begun) return;
     begun = true;
     $("#starter").css("opacity","0");
-    newChord();
+    newChordProgression();
 }
 
 // Functions for user feedback
@@ -211,7 +275,7 @@ var btRepeatOnclick = function() {
 var btNextOnclick = function() {
     // Called when the next chord button is pressed on the feedback panel.
     $("#feedback").css("visibility","hidden");
-    newChord();
+    newChordProgression();
 }
 
 
