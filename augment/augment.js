@@ -380,6 +380,7 @@ var bassBtnOnclick = function(root, quality) {
         chordIsPlaying = false;
     
         gradeChordProgressionAndDoFeedback();
+        currentGuess = [];
         currentGuessIndex = 0;
     }
 }
