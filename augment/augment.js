@@ -7,8 +7,8 @@ var chordQualitiesToTest = ["maj","min","dom7"];
 var chordRootsToTest   =      ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#'];
 var chordButtonsToShow = ['Gb','Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#','C#','G#','D#','A#'];
 // Settings that won't change much
-var bassBtnSize = 50;
-var bassBtnSpacing = 15;
+var bassBtnSize = 57;
+var bassBtnSpacing = 10;
 
 // Global state variables
 var begun = false;
@@ -134,6 +134,9 @@ for (i=0; i<chordQualitiesToTest.length; i++) {
 $(".bass-btn").css("width",bassBtnSize+"px");
 $(".bass-btn").css("height",bassBtnSize+"px");
 $(".bass-btn").css("border-radius","100px");
+$("#bass-btn-C-maj").css("border-style","solid");
+$("#bass-btn-C-maj").css("border-color","black");
+$("#bass-btn-C-maj").css("border-width","3px");
 // $("#bassplate").append("<button>But</button>");
 
 
@@ -161,6 +164,10 @@ var playChordProgressionFromNumbers = function(chordNumbers) {
             MIDI.noteOff(0, noteNumbers[j], (i+1)*duration);
         }
     }
+}
+var beginPlayingChordProgressionFromNumbers = function(chordNumbers) {
+    currentInterval = setInterval(playChordProgressionFromNumbers, 6000, chordNumbers);
+    playChordProgressionFromNumbers(chordNumbers);
 }
 var chord2numbers = function(root, quality) {
     // Converts ['C','maj'] into [0,4,7]
@@ -224,9 +231,9 @@ var playChordProgression = function(chordProgression, loop) {
     // Play chord progression every 6 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
     if (loop) {
-        currentInterval = setInterval(playChordProgressionFromNumbers, 6000, noteSetSet);
+        setTimeout(beginPlayingChordProgressionFromNumbers, 1000, noteSetSet);
     } else {
-        playChordProgressionFromNumbers(chordProgressionNumbers);
+        playChordProgressionFromNumbers(noteSetSet);
     }
 }
 var chooseChord = function() {
