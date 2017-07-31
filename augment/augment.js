@@ -327,9 +327,13 @@ var gradeChordAndDoFeedback = function(root, quality) {
 var gradeChordProgressionAndDoFeedback = function() {
     for (var i=0; i<4; i++) {
         var guessRoot = letterNoteToNumberNote(currentGuess[i][0]);
+        console.log("guessRoot: "+guessRoot);
         var guessQuality = currentGuess[i][1];
+        console.log("guessQuality: "+guessQuality);
         var correctRoot = letterNoteToNumberNote(currentChordProgression[i][0]);
+        console.log("correctRoot: "+correctRoot);
         var correctQuality = currentChordProgression[i][1];
+        console.log("correctQuality: "+correctQuality);
         if (guessRoot===correctRoot && guessQuality===correctQuality) {
             $("#vs-"+i).css("background-color","#ccffcc");
         } else {
