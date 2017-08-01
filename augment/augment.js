@@ -166,7 +166,7 @@ var playChordProgressionFromNumbers = function(chordNumbers) {
     }
 }
 var beginPlayingChordProgressionFromNumbers = function(chordNumbers) {
-    playChordProgressionFromNumbers(chordNumbers);
+    // playChordProgressionFromNumbers(chordNumbers);
     currentInterval = setInterval(playChordProgressionFromNumbers, 6000, chordNumbers);
 }
 var chord2numbers = function(root, quality) {
