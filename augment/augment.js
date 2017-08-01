@@ -153,20 +153,22 @@ var playChordFromNumbers = function(noteNumbers) {
     }
 }
 var playChordProgressionFromNumbers = function(chordNumbers) {
+    console.log("Hit playChordProgressionFromNumbers()");
     // Plays a sequence of chords
     var duration = 1.0; // for each chord
     for (var i=0; i<chordNumbers.length; i++) {
         var noteNumbers = chordNumbers[i];
         for (var j=0; j<noteNumbers.length; j++) {
-            MIDI.noteOn(0, noteNumbers[j], 127, i*duration);
+            MIDI.noteOn(0, noteNumbers[j], 127, 0.001+i*duration);
         }
         for (var j=0; j<noteNumbers.length; j++) {
-            MIDI.noteOff(0, noteNumbers[j], (i+1)*duration);
+            MIDI.noteOff(0, noteNumbers[j], 0.001+(i+1)*duration);
         }
     }
 }
 var beginPlayingChordProgressionFromNumbers = function(chordNumbers) {
-    // playChordProgressionFromNumbers(chordNumbers);
+    console.log("Hit beginPlayingChordProgressionFromNumbers()");
+    playChordProgressionFromNumbers(chordNumbers);
     currentInterval = setInterval(playChordProgressionFromNumbers, 6000, chordNumbers);
 }
 var chord2numbers = function(root, quality) {
@@ -231,6 +233,7 @@ var playChordProgression = function(chordProgression, loop) {
     // Play chord progression every 6 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
     if (loop) {
+        console.log("Triggered setTimeout()");
         setTimeout(beginPlayingChordProgressionFromNumbers, 1000, noteSetSet);
     } else {
         playChordProgressionFromNumbers(noteSetSet);
@@ -334,13 +337,13 @@ var gradeChordAndDoFeedback = function(root, quality) {
 var gradeChordProgressionAndDoFeedback = function() {
     for (var i=0; i<4; i++) {
         var guessRoot = letterNoteToNumberNote(currentGuess[i][0]);
-        console.log("guessRoot: "+guessRoot);
+        // console.log("guessRoot: "+guessRoot);
         var guessQuality = currentGuess[i][1];
-        console.log("guessQuality: "+guessQuality);
+        // console.log("guessQuality: "+guessQuality);
         var correctRoot = letterNoteToNumberNote(currentChordProgression[i][0]);
-        console.log("correctRoot: "+correctRoot);
+        // console.log("correctRoot: "+correctRoot);
         var correctQuality = currentChordProgression[i][1];
-        console.log("correctQuality: "+correctQuality);
+        // console.log("correctQuality: "+correctQuality);
         if (guessRoot===correctRoot && guessQuality===correctQuality) {
             $("#vs-"+i).css("background-color","#ccffcc");
         } else {
