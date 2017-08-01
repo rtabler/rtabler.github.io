@@ -99,7 +99,7 @@ window.onload = function() {
         },
         onsuccess: function() {
             // $("#visualizer").css("visibility","visible");
-            setTimeout({
+            setTimeout(function(){
                 $("#visualizer").css("opacity","1");
             }, 5000);
         }
