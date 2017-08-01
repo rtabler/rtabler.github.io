@@ -166,8 +166,8 @@ var playChordProgressionFromNumbers = function(chordNumbers) {
     }
 }
 var beginPlayingChordProgressionFromNumbers = function(chordNumbers) {
-    currentInterval = setInterval(playChordProgressionFromNumbers, 6000, chordNumbers);
     playChordProgressionFromNumbers(chordNumbers);
+    currentInterval = setInterval(playChordProgressionFromNumbers, 6000, chordNumbers);
 }
 var chord2numbers = function(root, quality) {
     // Converts ['C','maj'] into [0,4,7]
