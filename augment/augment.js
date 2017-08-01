@@ -233,8 +233,9 @@ var playChordProgression = function(chordProgression, loop) {
     // Play chord progression every 6 seconds.
     // Will be stopped when clearInterval(currentInterval) is called.
     if (loop) {
-        console.log("Triggered setTimeout()");
-        setTimeout(beginPlayingChordProgressionFromNumbers, 1000, noteSetSet);
+        // console.log("Triggered setTimeout()");
+        // setTimeout(beginPlayingChordProgressionFromNumbers, 1000, noteSetSet);
+        beginPlayingChordProgressionFromNumbers(noteSetSet);
     } else {
         playChordProgressionFromNumbers(noteSetSet);
     }
