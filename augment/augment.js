@@ -99,7 +99,9 @@ window.onload = function() {
         },
         onsuccess: function() {
             // $("#visualizer").css("visibility","visible");
-            $("#visualizer").css("opacity","1");
+            setTimeout({
+                $("#visualizer").css("opacity","1");
+            }, 5000);
         }
     });
 }
@@ -234,8 +236,8 @@ var playChordProgression = function(chordProgression, loop) {
     // Will be stopped when clearInterval(currentInterval) is called.
     if (loop) {
         // console.log("Triggered setTimeout()");
-        // setTimeout(beginPlayingChordProgressionFromNumbers, 1000, noteSetSet);
-        beginPlayingChordProgressionFromNumbers(noteSetSet);
+        setTimeout(beginPlayingChordProgressionFromNumbers, 1000, noteSetSet);
+        // beginPlayingChordProgressionFromNumbers(noteSetSet);
     } else {
         playChordProgressionFromNumbers(noteSetSet);
     }
