@@ -350,9 +350,9 @@ var gradeChordProgressionAndDoFeedback = function() {
         // console.log("correctQuality: "+correctQuality);
         if (guessRoot===correctRoot && guessQuality===correctQuality) {
             $("#vs-"+i).css("background-color","#ccffcc");
-            $("#vs-"+i+"-ans").html(""+correctRootLetter+correctQuality);
         } else {
             $("#vs-"+i).css("background-color","#ffcccc");
+            $("#vs-"+i+"-ans").html(""+correctRootLetter+correctQuality);
         }
     }
     // Shows the button to play the next chord

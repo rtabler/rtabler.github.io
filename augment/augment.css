@@ -64,11 +64,11 @@ h1 {
     /*visibility: hidden;*/
     /*transition: opacity 1.25s;*/
 } .vs-guess {
-    background-color: orange;
+    /*background-color: orange;*/
     height: 56px;
     font-size: 22pt;
 } .vs-ans {
-    background-color: red;
+    /*background-color: red;*/
     height: 28px;
     font-size: 11pt;
 }
