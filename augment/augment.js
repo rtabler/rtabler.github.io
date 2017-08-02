@@ -338,7 +338,7 @@ var gradeChordAndDoFeedback = function(root, quality) {
     $("#feedback").css("visibility","visible");
 }
 var gradeChordProgressionAndDoFeedback = function() {
-    for (var i=0; i<4; i++) {
+    for (var i=1; i<=4; i++) {
         var guessRoot = letterNoteToNumberNote(currentGuess[i][0]);
         // console.log("guessRoot: "+guessRoot);
         var guessQuality = currentGuess[i][1];
