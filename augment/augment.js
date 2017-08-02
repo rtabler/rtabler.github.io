@@ -409,7 +409,8 @@ var btNextOnclick = function() {
     $("#feedback").css("visibility","hidden");
     // newChord();
     for (var i=0; i<4; i++) {
-        $("#vs-"+i).html("");
+        $("#vs-"+i+"-guess").html("");
+        $("#vs-"+i+"-ans").html("");
         $("#vs-"+i).css("background-color","white");
     }
     newChordProgression();
