@@ -88,8 +88,8 @@ var numberNoteToLetterNote = function(n,p) {
 
 // Load MIDI resources
 window.onload = function() {
-    // $("#visualizer").css("opacity","1");
-    // return;
+    $("#visualizer").css("opacity","1");
+    return;
     MIDI.loadPlugin({
         soundfontUrl: "MIDI.js-master/examples/soundfont/",
         instrument: "acoustic_grand_piano",
@@ -109,7 +109,7 @@ window.onload = function() {
 
 for (var i=0; i<4; i++) {
     $("#vs-"+i).css("background-color","white");
-    $("#vs-"+i).css("left",(i*125)+"px");
+    $("#vs-"+i).css("left",(i*140)+"px");
 }
 // Draw the parts of the UI that depend on settings
 $("#bassplate").css("background-color", "yellow");
@@ -343,12 +343,14 @@ var gradeChordProgressionAndDoFeedback = function() {
         // console.log("guessRoot: "+guessRoot);
         var guessQuality = currentGuess[i][1];
         // console.log("guessQuality: "+guessQuality);
-        var correctRoot = letterNoteToNumberNote(currentChordProgression[i][0]);
+        var correctRootLetter = currentChordProgression[i][0];
+        var correctRoot = letterNoteToNumberNote(correctRootLetter);
         // console.log("correctRoot: "+correctRoot);
         var correctQuality = currentChordProgression[i][1];
         // console.log("correctQuality: "+correctQuality);
         if (guessRoot===correctRoot && guessQuality===correctQuality) {
             $("#vs-"+i).css("background-color","#ccffcc");
+            $("#vs-"+i+"-ans").html(""+correctRootLetter+correctQuality);
         } else {
             $("#vs-"+i).css("background-color","#ffcccc");
         }
@@ -384,7 +386,7 @@ var bassBtnOnclick = function(root, quality) {
     }
 
     currentGuess.push([root,quality]);
-    $("#vs-"+currentGuessIndex).html(""+root+quality);
+    $("#vs-"+currentGuessIndex+"-guess").html(""+root+quality);
     currentGuessIndex++;
 
     if (currentGuessIndex > 3) {
