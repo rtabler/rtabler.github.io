@@ -107,7 +107,7 @@ window.onload = function() {
 }
 
 
-for (var i=0; i<4; i++) {
+for (var i=1; i<=4; i++) {
     $("#vs-"+i).css("background-color","white");
     $("#vs-"+i).css("left",(i*140)+"px");
 }
