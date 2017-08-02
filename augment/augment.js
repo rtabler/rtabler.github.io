@@ -88,8 +88,8 @@ var numberNoteToLetterNote = function(n,p) {
 
 // Load MIDI resources
 window.onload = function() {
-    $("#visualizer").css("opacity","1");
-    return;
+    // $("#visualizer").css("opacity","1");
+    // return;
     MIDI.loadPlugin({
         soundfontUrl: "MIDI.js-master/examples/soundfont/",
         instrument: "acoustic_grand_piano",
