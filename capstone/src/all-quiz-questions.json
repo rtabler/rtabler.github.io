@@ -1,0 +1,205 @@
+{
+  "allQuestions": {
+    "generalQuestions": [
+      {"type": "checkbox",
+        "question": "Which social media platforms do you use regularly?",
+        "answers": [
+          {"disp":"Facebook", "math":["USE_FB"]},
+          {"disp":"YouTube", "math":[]},
+          {"disp":"WhatsApp", "math":[]},
+          {"disp":"Instagram", "math":[]},
+          {"disp":"Twitter", "math":["USE_TWT"]},
+          {"disp":"Reddit", "math":[]},
+          {"disp":"Pinterest", "math":[]},
+          {"disp":"Snapchat", "math":[]},
+          {"disp":"LinkedIn", "math":[]},
+          {"disp":"Tumblr", "math":[]},
+          {"disp":"Telegram", "math":[]},
+          {"disp":"Discord", "math":[]}
+        ]
+      },
+      {"type": "checkbox",
+        "question": "Why do you use social media? Check all that apply.",
+        "answers": [
+          {"disp": "to keep in touch with friends and family", "math":["WHY_GOOD*1"]},
+          {"disp": "to share stuff with friends and family", "math":["WHY_GOOD*1"]},
+          {"disp": "to record my life and keep memories", "math":["WHY_GOOD*1"]},
+          {"disp": "to remember people's birthdays", "math":[]},
+          {"disp": "to meet new people", "math":["WHY_GOOD*2"]},
+          {"disp": "to observe people", "math":["WHY_GOOD*0.5","WHY_BAD*2"]},
+          {"disp": "to get news or information", "math":["WHY_GOOD*0.5","WHY_BAD*0.5"]},
+          {"disp": "to learn about or talk about cool stuff", "math":["WHY_GOOD*1","WHY_BAD*0.5"]},
+          {"disp": "to get help or feel supported", "math":["WHY_GOOD*3"]},
+          {"disp": "to be a part of a community", "math":["WHY_GOOD*3"]},
+          {"disp": "to get inspiration", "math":["WHY_GOOD*1"]},
+          {"disp": "to express myself", "math":["WHY_GOOD*1"]},
+          {"disp": "to promote my work / to network", "math":["WHY_GOOD*1"]},
+          {"disp": "to relax", "math":["WHY_GOOD*1"]},
+          {"disp": "to pass time", "math":[]},
+          {"disp": "I'm bored", "math":["WHY_BAD*1"]},
+          {"disp": "I don't know any more", "math":["WHY_BAD*3"]},
+          {"disp": "I can't seem to stop", "math":["WHY_BAD*4"]}
+        ]
+      }
+    ],
+    "addictionQuestions": [
+      {"type": "radio",
+        "question": "How often do you check social media?",
+        "answers": [
+          {"disp":"about once per week or less", "math":[]},
+          {"disp":"about once per day", "math":[]},
+          {"disp":"a few times per day", "math":[]},
+          {"disp":"many times per day", "math":[]},
+          {"disp":"every few hours", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Do you impulsively check social media? (such as at work, in class, when waking up, when you get home...)",
+        "answers": [
+          {"disp":"no", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"yes", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Do you use social media when you know you should be doing other things?",
+        "answers": [
+          {"disp":"no", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"yes, this is a familiar feeling", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Do you use social media to distract yourself from problems you're dealing with in real life?",
+        "answers": [
+          {"disp":"no", "math":[]},
+          {"disp":"no, but it does help me chill sometimes", "math":[]},
+          {"disp":"maybe?", "math":[]},
+          {"disp":"yes", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "In the past, have you tried to cut back on social media use and failed?",
+        "answers": [
+          {"disp":"no, I haven't tried to cut back", "math":[]},
+          {"disp":"no, I cut back pretty successfully", "math":[]},
+          {"disp":"I cut back, but not as much as I had hoped", "math":[]},
+          {"disp":"yes, now I tell myself that it's ok", "math":[]},
+          {"disp":"yes, totally", "math":[]}
+      ]}
+    ],
+    "anxietyQuestions": [
+      {"type": "radio",
+        "question": "Do you feel isolated or disconnected from other people?",
+        "answers": [
+          {"disp":"yes", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"no", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Do you feel that you're \"falling behind\" compared to your friends?",
+        "answers": [
+          {"disp":"yes", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"no, not at all", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Do you care about the number of likes or interactions you receive on social media? (likes, retweets, upvotes, reblogs, etc)",
+        "answers": [
+          {"disp":"yes, I check often",  "math":[]},
+          {"disp":"a little bit",  "math":[]},
+          {"disp":"no, not at all", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "When you use social media, do you worry that your friends are doing things that you're missing out on? (FOMO)",
+        "answers": [
+          {"disp":"yes", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"no", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Have you used social media to portray yourself as different from how you really are?",
+        "answers": [
+          {"disp":"yes", "math":[]},
+          {"disp":"a little bit",  "math":[]},
+          {"disp":"no", "math":[]}
+        ]
+      }
+    ],
+    "hostilityQuestions": [
+      {"type": "radio",
+        "question": "Do you have any anonymous social media accounts that you use regularly?",
+        "answers": [
+          {"disp":"yes", "math":[]},
+          {"disp":"no", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Do you enjoy debating with people on social media?",
+        "answers": [
+          {"disp":"no, I really try to avoid it", "math":[]},
+          {"disp":"no, but I do it anyway", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"yes", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Whenever you see someone say something dumb or rude on the internet, how often do you try to correct them?",
+        "answers": [
+          {"disp":"never", "math":[]},
+          {"disp":"once in a while", "math":[]},
+          {"disp":"sometimes", "math":[]},
+          {"disp":"often", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "When replying to someone rude or provocative, what is usually the tone of your response?",
+        "answers": [
+          {"disp":"I try to be as polite as possible", "math":[]},
+          {"disp":"I try to be straightforward and objective", "math":[]},
+          {"disp":"I try to be scolding", "math":[]},
+          {"disp":"I try to be witty and dish it back at them", "math":[]}
+        ]
+      }
+    ],
+    "misinformationQuestions": [
+      {"type": "radio",
+        "question": "Do you get most of your news of current events from social media feeds?",
+        "answers": [
+          {"disp":"yes", "math":[]},
+          {"disp":"no", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Of all the sources (people, pages, organizations, communities, etc) that deliver your political or world news, which do you read the most from?",
+        "answers": [
+          {"disp":"sources that mostly align with my views", "math":[]},
+          {"disp":"sources that most people would agree are \"neutral\"", "math":[]},
+          {"disp":"sources that mostly disagree with my views", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "How often do you read news and opinions from sources that have biases opposing your political beliefs?",
+        "answers": [
+          {"disp":"no, not at all", "math":[]},
+          {"disp":"once in a while", "math":[]},
+          {"disp":"sometimes, regularly", "math":[]},
+          {"disp":"often", "math":[]}
+        ]
+      },
+      {"type": "radio",
+        "question": "Of all of the people that you follow on various social media sites, how many of them hold views opposing your political beliefs?",
+        "answers": [
+          {"disp":"none or very few", "math":[]},
+          {"disp":"a few", "math":[]},
+          {"disp":"around half", "math":[]},
+          {"disp":"most of them", "math":[]}
+        ]
+      }
+    ]
+  }
+}
