@@ -43,7 +43,7 @@ var submitForm = function() {
   console.log(messageText);
 
   xhr.onreadystatechange = onResponse;
-  xhr.open("GET", "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText, true);
+  xhr.open("POST", "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText, true);
   xhr.send();
 }
 // alert("Hello");
