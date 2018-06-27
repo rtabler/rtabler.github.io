@@ -27,7 +27,7 @@
 
 var onResponse = function() {
   if (this.readyState == 4) {
-    console.log(this);
+    console.log(JSON.stringify(this));
     console.log(this.status);
     console.log(this.responseText);
   }
