@@ -23,6 +23,7 @@
     <input name="inputtext" type="text">
     <input name="submitbutton" type="submit">
   </form>
+  <script src="jquery-3.3.1.js"></script>
   <script>
 
 var onResponse = function() {
@@ -42,9 +43,21 @@ var submitForm = function() {
   }
   console.log(messageText);
 
-  xhr.onreadystatechange = onResponse;
-  xhr.open("POST", "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText, true);
-  xhr.send();
+  // xhr.onreadystatechange = onResponse;
+  // xhr.open("POST", "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText, true);
+  // xhr.send();
+
+  $.ajax({
+    method: "POST",
+    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage",
+    data: {
+      text: messageText
+    }
+  }).done(function( msg ) { 
+    alert("Hi");
+    console.log( msg );
+  });
+
 }
 // alert("Hello");
   </script>
