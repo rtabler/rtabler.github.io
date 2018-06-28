@@ -49,10 +49,10 @@ var submitForm = function( event ) {
 
   $.ajax({
     method: "POST",
-    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage",
-    data: {
-      text: messageText
-    }
+    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText,
+    // data: {
+    //   text: messageText
+    // }
   }).done(function( msg ) { 
     alert("returned done");
     console.log( msg );
