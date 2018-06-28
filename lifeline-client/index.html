@@ -18,7 +18,7 @@
 
 <body>
   <h1>Hi</h1>
-  <form onsubmit="submitForm()">
+  <form onsubmit="return submitForm(event)">
     <h2>Message:</h2>
     <input name="inputtext" type="text">
     <input name="submitbutton" type="submit">
@@ -33,7 +33,7 @@ var onResponse = function() {
     console.log(this.responseText);
   }
 }
-var submitForm = function() {
+var submitForm = function( event ) {
   var xhr = new XMLHttpRequest();
 
   var messageText = "";
@@ -54,10 +54,15 @@ var submitForm = function() {
       text: messageText
     }
   }).done(function( msg ) { 
-    alert("Hi");
+    alert("returned done");
+    console.log( msg );
+  }).error(function( msg ) {
+    alert("returned error")
     console.log( msg );
   });
 
+  event.preventDefault();
+  return false;
 }
 // alert("Hello");
   </script>
