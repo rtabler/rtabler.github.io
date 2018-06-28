@@ -56,8 +56,8 @@ var submitForm = function( event ) {
   }).done(function( msg ) { 
     alert("returned done");
     console.log( msg );
-  }).error(function( msg ) {
-    alert("returned error")
+  }).fail(function( msg ) {
+    alert("returned fail")
     console.log( msg );
   });
 
