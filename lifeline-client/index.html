@@ -49,11 +49,12 @@ var submitForm = function( event ) {
 
   $.ajax({
     type: "POST",
-    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText,
+    // url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText,
+    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage",
     // headers: { 'Access-Control-Allow-Origin': 'https://rtabler.github.io/' }
-    // data: {
-    //   text: messageText
-    // }
+    data: {
+      text: messageText
+    }
   }).done(function( msg ) { 
     alert("returned done");
     console.log( msg );
