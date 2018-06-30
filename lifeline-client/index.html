@@ -62,15 +62,13 @@ var submitForm = function( event ) {
   $.ajax({
     type: "POST",
     // url: urlWithMessage,
-    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text=texthere",
+    url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage",
     crossDomain: true,
     headers: { 'Access-Control-Allow-Origin': 'https://rtabler.github.io/' },
-    dataType: 'text', // https://stackoverflow.com/a/6120260/7213839
-    data: {
-      text: messageText
-    },
-    success: function() { alert("returned success"); },
-    error: function() { alert('returned error'); }
+    // dataType: 'text', // https://stackoverflow.com/a/6120260/7213839
+    data: graphModel
+    // success: function() { alert("returned success"); },
+    // error: function() { alert('returned error'); }
   }).done(function( msg ) { 
     alert("returned done");
     console.log( msg );
