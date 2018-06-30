@@ -17,40 +17,63 @@
 </head>
 
 <body>
-  <h1>Hi</h1>
+  <h1>Lifeline</h1>
+  <h2>Tell your story:</h2>
   <form onsubmit="return submitForm(event)">
-    <h2>Message:</h2>
-    <input id="inputAge" type="text">
-    <input id="inputHappiness" type="text">
-    <input id="inputPointDescription" type="text">
-    <input id="inputSlopeDescription" type="text">
+    <h3>Phases:</h3>
+    Age:<input id="inputPhaseStartAge"><br>
+    Phase name:<input id="inputPhaseDescription"><br>
+    <button id="buttonAddPhase" type="button">Add Phase</button>
+    <table id="tablePhases"></table>
+    <h3>Points:</h3>
+    Age:<input id="inputPointAge" type="text"><br>
+    Happiness level:<input id="inputPointHappiness" type="text"><br>
+    Description (optional):<input id="inputPointDescription" type="text"><br>
+    Description of following line (optional):<input id="inputLineDescription" type="text"><br>
     <button id="buttonAddPoint" type="button">Add Point</button>
-    <table id="tablePoints">
-    </table>
+    <table id="tablePoints"></table>
+    <h3>Submit:</h3>
     <input id="submitbutton" type="submit">
   </form>
   <script src="jquery-3.3.1.js"></script>
   <script>
 
-var graphModel = [];
+var graphModel = {
+  phasesModel: [],
+  pointsModel: []
+};
 
+$("#buttonAddPhase").click(function() {
+  // model
+  graphModel.phasesModel.push({
+    startAge: $("#inputPhaseStartAge").val(),
+    description: $("#inputPhaseDescription").val()
+  });
+  // view
+  $("#tablePhases").append(
+    $("<tr></tr>")
+    .addClass("tablePhase")
+    .append( $("<th></th>").append($("#inputPhaseStartAge").val()) )
+    .append( $("<th></th>").append($("#inputPhaseDescription").val()) )
+  );
+})
 $("#buttonAddPoint").click(function() {
   // model
-  graphModel.push({
-    age: $("#inputAge").val(),
-    happiness: $("#inputHappiness").val(),
+  graphModel.pointsModel.push({
+    age: $("#inputPointAge").val(),
+    happiness: $("#inputPointHappiness").val(),
     pointDescription: $("#inputPointDescription").val(),
-    slopeDescription: $("#inputSlopeDescription").val()
+    slopeDescription: $("#inputLineDescription").val()
   });
   // view
   $("#tablePoints").append(
     $("<tr></tr>")
     .addClass("tablePoint")
-    .append( $("<th></th>").append($("#inputAge").val()) )
-    .append( $("<th></th>").append($("#inputHappiness").val()) )
+    .append( $("<th></th>").append($("#inputPointAge").val()) )
+    .append( $("<th></th>").append($("#inputPointHappiness").val()) )
     .append( $("<th></th>").append($("#inputPointDescription").val()) )
-    .append( $("<th></th>").append($("#inputSlopeDescription").val()) )
-  )
+    .append( $("<th></th>").append($("#inputLineDescription").val()) )
+  );
 });
 
 var submitForm = function( event ) {
