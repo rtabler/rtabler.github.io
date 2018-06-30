@@ -20,38 +20,51 @@
   <h1>Hi</h1>
   <form onsubmit="return submitForm(event)">
     <h2>Message:</h2>
-    <input name="inputtext" type="text">
-    <input name="submitbutton" type="submit">
+    <input id="inputAge" type="text">
+    <input id="inputHappiness" type="text">
+    <input id="inputPointDescription" type="text">
+    <input id="inputSlopeDescription" type="text">
+    <button id="buttonAddPoint" type="button">Add Point</button>
+    <table id="tablePoints">
+    </table>
+    <input id="submitbutton" type="submit">
   </form>
   <script src="jquery-3.3.1.js"></script>
   <script>
 
-var onResponse = function() {
-  if (this.readyState == 4) {
-    console.log(JSON.stringify(this));
-    console.log(this.status);
-    console.log(this.responseText);
-  }
-}
+var graphModel = [];
+
+$("#buttonAddPoint").click(function() {
+  // model
+  graphModel.push({
+    age: $("#inputAge").val(),
+    happiness: $("#inputHappiness").val(),
+    pointDescription: $("#inputPointDescription").val(),
+    slopeDescription: $("#inputSlopeDescription").val()
+  });
+  // view
+  $("#tablePoints").append(
+    $("<tr></tr>")
+    .addClass("tablePoint")
+    .append( $("<th></th>").append($("#inputAge").val()) )
+    .append( $("<th></th>").append($("#inputHappiness").val()) )
+    .append( $("<th></th>").append($("#inputPointDescription").val()) )
+    .append( $("<th></th>").append($("#inputSlopeDescription").val()) )
+  )
+});
+
 var submitForm = function( event ) {
-  var xhr = new XMLHttpRequest();
 
-  var messageText = "";
-  var inputTextElements = document.getElementsByName("inputtext");
-  for (var i=0; i<inputTextElements.length; i++) {
-    messageText += inputTextElements[i].value;
-  }
+  var messageText = JSON.stringify( graphModel );
+  // var urlWithMessage = "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText;
   console.log(messageText);
-
-  // xhr.onreadystatechange = onResponse;
-  // xhr.open("POST", "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText, true);
-  // xhr.send();
-
   $.ajax({
     type: "POST",
-    // url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText,
+    // url: urlWithMessage,
     url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage",
+    crossDomain: true,
     // headers: { 'Access-Control-Allow-Origin': 'https://rtabler.github.io/' }
+    dataType: 'jsonp', // https://stackoverflow.com/a/6120260/7213839
     data: {
       text: messageText
     }
