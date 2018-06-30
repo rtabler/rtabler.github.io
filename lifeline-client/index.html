@@ -65,7 +65,7 @@ var submitForm = function( event ) {
     url: "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage",
     crossDomain: true,
     // headers: { 'Access-Control-Allow-Origin': 'https://rtabler.github.io/' }
-    dataType: 'jsonp', // https://stackoverflow.com/a/6120260/7213839
+    dataType: 'json', // https://stackoverflow.com/a/6120260/7213839
     data: {
       text: messageJSON
     }
