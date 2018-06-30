@@ -68,7 +68,9 @@ var submitForm = function( event ) {
     dataType: 'text', // https://stackoverflow.com/a/6120260/7213839
     data: {
       text: messageText
-    }
+    },
+    success: function() { alert("returned success"); },
+    error: function() { alert('returned error'); }
   }).done(function( msg ) { 
     alert("returned done");
     console.log( msg );
