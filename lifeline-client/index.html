@@ -66,7 +66,12 @@ var submitForm = function( event ) {
     crossDomain: true,
     headers: { 'Access-Control-Allow-Origin': 'https://rtabler.github.io/' },
     dataType: 'text', // https://stackoverflow.com/a/6120260/7213839
-    data: graphModel
+    data: {
+      age: "someAge",
+      happiness: "someHappiness",
+      pointDescription: "somePD",
+      slopeDescription: "someSD",
+    }
     // success: function() { alert("returned success"); },
     // error: function() { alert('returned error'); }
   }).done(function( msg ) { 
