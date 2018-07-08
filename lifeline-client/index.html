@@ -20,23 +20,341 @@
   <h1>Lifeline</h1>
   <h2>Tell your story:</h2>
   <form onsubmit="return submitForm(event)">
+
+    <div id="container" style="min-width: 310px; height: 400px; max-width: 700px; margin: 0 auto"></div>
+
     <h3>Phases:</h3>
     Age:<input id="inputPhaseStartAge"><br>
     Phase name:<input id="inputPhaseDescription"><br>
     <button id="buttonAddPhase" type="button">Add Phase</button>
     <table id="tablePhases"></table>
-    <h3>Points:</h3>
-    Age:<input id="inputPointAge" type="text"><br>
-    Happiness level:<input id="inputPointHappiness" type="text"><br>
-    Description (optional):<input id="inputPointDescription" type="text"><br>
-    Description of following line (optional):<input id="inputLineDescription" type="text"><br>
-    <button id="buttonAddPoint" type="button">Add Point</button>
-    <table id="tablePoints"></table>
     <h3>Submit:</h3>
     <input id="submitbutton" type="submit">
   </form>
+
   <script src="jquery-3.3.1.js"></script>
-  <script>
+  <!-- // <script src="../../Highcharts-6.1.1/code/highcharts.src.js"></script> -->
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <!-- // <script src="https://code.highcharts.com/exporting.src.js"></script> -->
+  <!-- // <script src="https://code.highcharts.com/export-data.src.js"></script> -->
+
+  <script type="text/javascript">
+
+var age = 80; // in years
+var plotXY; // the position of the mouse on the plot when clicked
+
+var lifeChart = Highcharts.chart('container', {
+  chart: {
+    animation: false,
+    type: 'spline',
+    margin: [70, 50, 60, 80],
+    events: {
+      click: function (e) {
+        // find the clicked values and the series
+        // var x = Math.round(e.xAxis[0].value),
+        //     y = Math.round(e.yAxis[0].value),
+        //     series = this.series[0];
+        var x = e.xAxis[0].value,
+            y = e.yAxis[0].value,
+            series = this.series[0];
+
+        console.log(e);
+
+        // if the user somehow clicked out of graph bounds
+        if (x < 0 || x > age || y < -60 || y > 60) {
+          return;
+        }
+
+        // if the user clicked on an age that already has a point
+        var i;
+        for (i=0; i<series.data.length; i++) {
+          if (x === series.data[i].x) {
+            return;
+          }
+        }
+
+        // Add it
+        // series.addPoint({
+        //   x: x,
+        //   y: y,
+        //   // at: 0
+
+        //   // name: 'Point 1',
+        //   // color: '#00FF00',
+        //   // y: 0
+        // }, false, false, true);
+        // this.redraw();
+
+      }
+    }
+  },
+  title: {
+    text: 'User supplied data'
+  },
+  subtitle: {
+    text: 'Click the plot area to add a point. Click a point to remove it.'
+  },
+  xAxis: {
+    gridLineWidth: 1,
+    min: 0,
+    max: age,
+    tickInterval: 10,
+    labels: {
+      enabled: true
+    },
+    minPadding: 0.2,
+    maxPadding: 0.2,
+    maxZoom: 60
+  },
+  yAxis: {
+    title: {
+      text: 'Overall Happiness'
+    },
+    labels: {
+      enabled: false
+    },
+    min: -60,
+    max: 60,
+    tickInterval: 10,
+    minPadding: 0.2,
+    maxPadding: 0.2,
+    maxZoom: 60,
+    plotLines: [{
+      value: 0,
+      width: 1,
+      color: '#808080'
+    }]
+  },
+  legend: {
+    enabled: false
+  },
+  exporting: {
+    enabled: false
+  },
+  plotOptions: {
+    // allowPointSelect: false,
+    // allowPointSelect: true,
+    series: {
+      lineWidth: 1,
+      point: {
+        events: {
+          'click': function () {
+            // if (this.series.data.length > 1) {
+            //   this.remove();
+            // }
+          }
+        }
+      },
+      marker: {
+        enabled: true
+      }
+    },
+    line: {
+      // shared options for all line series
+    }
+  },
+  tooltip: {
+    enabled: false
+  },
+  series: [{
+    data: [{ x:0, y:0, marker:{radius:0} }, { x:age, y:0, point:false, marker:{radius:0} }]
+    // allowPointSelect: false
+    // type: 'line'
+  }]
+});
+
+
+var clickCoordsToPlotCoords = function( x, y ) {
+  // useful shorthands from lifeChart object
+  var yAxis = lifeChart.yAxis[0];
+  // convert to plot coordinates
+  var plotWidth = $('.highcharts-plot-background')[0].width.baseVal.value;
+  var plotHeight = $('.highcharts-plot-background')[0].height.baseVal.value;
+  var plotX = x - lifeChart.margin[3]; // in pixels
+  plotX = ( age * plotX ) / plotWidth; // in graph units (years)
+  var plotY = y - lifeChart.margin[0]; // in pixels
+  plotY = ( ( yAxis.min - yAxis.max ) * plotY ) / plotHeight + yAxis.max; // in graph units (overall happiness)
+  return [ plotX, plotY ];
+}
+var plotCoordsToClickCoords = function( x, y ) {
+  // useful shorthands from lifeChart object
+  var yAxis = lifeChart.yAxis[0];
+  // convert to click location
+  var plotWidth = $('.highcharts-plot-background')[0].width.baseVal.value;
+  var plotHeight = $('.highcharts-plot-background')[0].height.baseVal.value;
+  var clickX = ( plotWidth * x ) / age; // in pixels
+  clickX = clickX + lifeChart.margin[3]; // adjusted to .highcharts-plot-background
+  var clickY = ( ( yAxis.max - y ) * plotHeight ) / ( yAxis.max - yAxis.min ); // in pixels
+  clickY = clickY + lifeChart.margin[0]; // adjusted to .highcharts-plot-background
+  return [ clickX, clickY ];
+}
+var pixelCoordsAreNear = function( x1, y1, x2, y2, r ) {
+  // console.log("test");
+  // console.log(x1-x2);
+  if ( Math.abs( x1-x2 ) > r || Math.abs( y1-y2 ) > r ) { return false; }
+  // console.log(Math.abs( x1-x2 )**2);
+  return ( Math.abs( x1-x2 )**2 + Math.abs( y1-y2 )**2 <= r**2 );
+}
+var adjustLastPointIfNeeded = function() {
+  var data = lifeChart.series[0].data;
+  var lastPointIndex = data.length - 1;
+  if ( data[ lastPointIndex-1 ].y !== data[ lastPointIndex ].y ) {
+    data[ lastPointIndex ].update( data[ lastPointIndex-1 ].y );
+  }
+}
+
+$('#container').on('mousedown', function ( e ) {
+  // useful shorthands from lifeChart object
+  var series = lifeChart.series[0];
+  var yAxis = lifeChart.yAxis[0];
+
+  // console.log(lifeChart);
+
+  // find where on the plot was clicked
+  plotNewXY = clickCoordsToPlotCoords( lifeChart.mouseDownX, lifeChart.mouseDownY );
+
+  // reject if the click was not in the plot area
+  if ( plotNewXY[0] < 0 || plotNewXY[0] > age || plotNewXY[1] < yAxis.min || plotNewXY[1] > yAxis.max ) {
+    return;
+  }
+
+  // check if click was near an existing point
+  var i;
+  var pointCoords;
+  var nearbyPointIndex = undefined;
+  for (i=0; i<series.data.length; i++) { // (excludes first and last points)
+    // console.log( series.data[i].x );
+    pointCoords = plotCoordsToClickCoords( series.data[i].x, series.data[i].y );
+    if (
+      pixelCoordsAreNear(
+        lifeChart.mouseDownX, lifeChart.mouseDownY,
+        pointCoords[0],       pointCoords[1],
+        10 // pixels
+      )
+    ) {
+      nearbyPointIndex = i;
+      break;
+    }
+  }
+  console.log( nearbyPointIndex);
+  // if the above loop found a nearby point, but it's unmovable, then do nothing
+  if ( nearbyPointIndex === 0 || nearbyPointIndex === series.data.length-1 ) {
+    console.log("doing nothing");
+    console.log(plotNewXY);
+    return;
+  }
+  // if the above loop found a nearby point, and it's movable, then start editing that point
+  if ( nearbyPointIndex !== undefined ) {
+    plotXY = [ series.data[nearbyPointIndex].x, series.data[nearbyPointIndex].y ];
+    return;
+  }
+
+  // reject if the user clicked on an age that already has a point
+  var i;
+  for (i=0; i<series.data.length; i++) {
+    if ( plotNewXY[0] === series.data[i].x ) {
+      return;
+    }
+  }
+
+  // add point
+  console.log("adding new point");
+  plotXY = plotNewXY;
+  series.addPoint({
+    x: plotXY[0],
+    y: plotXY[1],
+    // color: '#BF0B23',
+    // marker: { fillColor: '#BF0B23', radius: 10 },
+    // name: 'Point 1',
+    // color: '#00FF00',
+    // y: 0
+  }, false, false, true);
+  // console.log(series.data[1]);
+  lifeChart.redraw();
+  adjustLastPointIfNeeded();
+  // console.log(series.data);
+
+});
+
+$('#container').on('mousemove', function( e ) {
+  // reject if mouse is just moving without being pressed
+  if ( lifeChart.mouseIsDown === undefined || lifeChart.mouseIsDown === false ) {
+    return;
+  }
+  // reject if no point is currently grabbed
+  if ( plotXY === undefined ) {
+    return;
+  }
+  // console.log(plotXY);
+
+  // useful shorthands from lifeChart object
+  var series = lifeChart.series[0];
+  var yAxis = lifeChart.yAxis[0];
+
+  // calculate the update plot coordinates
+  var plotNewXY = clickCoordsToPlotCoords(
+    e.pageX - $('#container').offset().left,
+    e.pageY - $('#container').offset().top
+  );
+
+  // do nothing if there was no pixel-measurable change
+  if ( plotNewXY[0] === plotXY[0] && plotNewXY[1] === plotXY[1] ) {
+    return;
+  }
+
+  // do nothing if new coords are outside the plot
+  if ( plotNewXY[0] < 0 || plotNewXY[0] > age || plotNewXY[1] < yAxis.min || plotNewXY[1] > yAxis.max) {
+    return;
+  }
+
+  // do nothing if new x-coord exactly matches that of an existing point
+  var i;
+  for (i=0; i<series.data.length; i++) {
+    if ( plotNewXY[0] === series.data[i].x ) {
+      return;
+    }
+  }
+
+  // prepare to update the point-being-dragged by finding its index in the data list,
+  // as well as its limiting neighboring points
+  var pLowerIndex;
+  var pIndex;
+  var pUpperIndex;
+  for (pIndex=0; pIndex<series.data.length; pIndex++) {
+    if ( plotXY[0] === series.data[pIndex].x ) {
+      break; // pIndex is now the index of plotNewXY
+    }
+  }
+
+  // determine if the point should be updated at its current index, or re-added at a different index
+  if ( plotNewXY[0] < series.data[pIndex-1].x || plotNewXY[0] > series.data[pIndex+1].x ) {
+    // remove the point and re-add it (so it has the correct index)
+    series.data[pIndex].remove();
+    series.addPoint({
+      x: plotNewXY[0],
+      y: plotNewXY[1],
+    }, false, false, true);
+  } else {
+    // update the point
+    series.data[pIndex].update({
+      x: plotNewXY[0],
+      y: plotNewXY[1]
+    });
+  }
+  // important business -- current=new and redraw
+  plotXY = plotNewXY;
+  lifeChart.redraw();
+  adjustLastPointIfNeeded();
+  return;
+
+});
+
+$('#container').on('mouseup', function( e ) {
+  // if a point was being grabbed, release it
+  plotXY = undefined;
+});
+
+
 
 var graphModel = {
   phasesModel: [],
@@ -57,31 +375,29 @@ $("#buttonAddPhase").click(function() {
     .append( $("<th></th>").append($("#inputPhaseDescription").val()) )
   );
 })
-$("#buttonAddPoint").click(function() {
-  // model
-  graphModel.pointsModel.push({
-    age: $("#inputPointAge").val(),
-    happiness: $("#inputPointHappiness").val(),
-    pointDescription: $("#inputPointDescription").val(),
-    slopeDescription: $("#inputLineDescription").val()
-  });
-  // view
-  $("#tablePoints").append(
-    $("<tr></tr>")
-    .addClass("tablePoint")
-    .append( $("<th></th>").append($("#inputPointAge").val()) )
-    .append( $("<th></th>").append($("#inputPointHappiness").val()) )
-    .append( $("<th></th>").append($("#inputPointDescription").val()) )
-    .append( $("<th></th>").append($("#inputLineDescription").val()) )
-  );
-});
 
 var submitForm = function( event ) {
 
   var messageJSON = graphModel;
   var messageText = JSON.stringify( messageJSON );
   // var urlWithMessage = "https://us-central1-lifeline-d8ce8.cloudfunctions.net/addMessage?text="+messageText;
-  console.log(messageText);
+
+  // console.log(lifeChart.series[0].data[0].x);
+  var i;
+  var data = lifeChart.series[0].data;
+  for (i=1; i<data.length-1; i++) { // excluding first and last points, which are predetermined
+    graphModel.pointsModel.push({
+      age: data[i].x,
+      happiness: data[i].y,
+      pointDescription: '',
+      slopeDescription: ''
+    });
+  }
+
+  console.log("SUBMITTING");
+  console.log(graphModel);
+
+  // console.log(messageText);
   $.ajax({
     type: "POST",
     // url: urlWithMessage,
