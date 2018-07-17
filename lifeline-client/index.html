@@ -10,6 +10,7 @@
 
   <!-- <link rel="stylesheet" href="style.css"> -->
   <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <!-- <link rel="stylesheet" href="https://blacklabel.github.io/annotations/css/styles.css"> -->
 
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -22,6 +23,7 @@
   <form onsubmit="return submitForm(event)">
 
     <div id="container" style="min-width: 310px; height: 400px; max-width: 700px; margin: 0 auto"></div>
+    <!-- <div id="ann-container" style="min-width: 310px; height: 400px; max-width: 700px; margin: 0 auto"></div> -->
 
     <h3>Phases:</h3>
     Age:<input id="inputPhaseStartAge"><br>
@@ -33,15 +35,340 @@
   </form>
 
   <script src="jquery-3.3.1.js"></script>
-  <!-- // <script src="../../Highcharts-6.1.1/code/highcharts.src.js"></script> -->
-  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <script src="../../Highcharts-6.1.1/code/highcharts.src.js"></script>
+  <!-- // <script src="https://code.highcharts.com/highcharts.src.js"></script> -->
+  <script src="https://code.highcharts.com/modules/annotations.js"></script>
+  <!-- // <script src="https://code.highcharts.com/stock/js/highstock.js"></script> -->
+  <!-- <scrpit src="https://blacklabel.github.io/annotations/js/annotations.js"></script> -->
   <!-- // <script src="https://code.highcharts.com/exporting.src.js"></script> -->
   <!-- // <script src="https://code.highcharts.com/export-data.src.js"></script> -->
 
   <script type="text/javascript">
 
 var age = 80; // in years
+var selectedPointIndex = -1;
 var plotXY; // the position of the mouse on the plot when clicked
+var clickPossible = false;
+var mouseDownTime = 0;
+var quickClickThreshold = 400; // ms
+var moved = false;
+var annotationIDs = [];
+var numAnnotations = 0;
+var editingAnno = false;
+// var mouseDownOnAnnotation = false;
+
+
+var graphModel = {
+  phasesModel: [],
+  pointsModel: []
+}
+
+var expectClick = function() {
+  clickPossible = true;
+  mouseDownTime = (new Date()).getTime();
+}
+var cancelClick = function() {
+  clickPossible = false;
+}
+var wasClick = function() {
+  var mouseUpTime =  (new Date()).getTime();
+  var click = clickPossible && mouseUpTime-mouseDownTime <= quickClickThreshold;
+  clickPossible = false;
+  mouseDownTime = 0;
+  return click;
+}
+
+var addPoint = function( plotXY ) {
+  var series = lifeChart.series[0];
+  
+  var insertIndex;
+  for (insertIndex=0; insertIndex<graphModel.pointsModel.length; insertIndex++) {
+    if ( graphModel.pointsModel[insertIndex].age > plotXY[0] ) {
+      break;
+    }
+  }
+  annotationIDs.splice( insertIndex, 0, undefined );
+  // var aid;
+  // for( aid=0; aid<annotationIDs.length; aid++ ) {
+  //   annotationIDs[ aid ] = 'anno-'+insertIndex;
+  // }
+  graphModel.pointsModel.splice( insertIndex, 0, {
+    age: plotXY[0],
+    happiness: plotXY[1],
+    pointDescription: undefined,
+    slopeDescription: undefined
+  });
+  series.addPoint({
+    x: graphModel.pointsModel[insertIndex].age,
+    y: graphModel.pointsModel[insertIndex].happiness,
+    // color: '#BF0B23',
+    // marker: { fillColor: '#BF0B23', radius: 10 },
+    // name: 'Point 1',
+    // color: '#00FF00',
+    // y: 0
+  }, false, false, true);
+  console.log("redrawing from addPoint()");
+  myRedraw( true );
+
+  return insertIndex;
+}
+var movePoint = function( index, newXY ) {
+  // console.log("movePoint -- index: "+index);
+  var series = lifeChart.series[0];
+  // console.log(series.data);
+  // console.log(pIndex);
+  var vIndex = index + 1;
+  // determine if the point should be updated at its current index, or re-added at a different index
+  // console.log("index>0: "+(index>0));
+  // if (index>0) {
+  //   console.log("newXY[0]: "+newXY[0]);
+  //   console.log("graphModel.pointsModel: ");
+  //   console.log(graphModel.pointsModel);
+  //   console.log("series.data: ");
+  //   console.log(series.data);
+  //   console.log("graphModel.pointsModel[index-1].age: "+graphModel.pointsModel[index-1].age);
+  // }
+  if (
+    ( index>0 && newXY[0]<graphModel.pointsModel[index-1].age )
+    || ( index<graphModel.pointsModel.length-1 && newXY[0]>graphModel.pointsModel[index+1].age )
+  ) {
+
+    // model
+    // remove
+    var splicedPoint = graphModel.pointsModel.splice( index, 1 )[0];
+    // find new index
+    var newIndex;
+    for ( newIndex=0; newIndex<graphModel.pointsModel.length; newIndex++) {
+      if ( graphModel.pointsModel[newIndex].age > newXY[0] ) {
+        break;
+      }
+    }
+    selectedPointIndex = newIndex;
+    // re-add
+    splicedPoint.age = newXY[0];
+    splicedPoint.happiness = newXY[1];
+    graphModel.pointsModel.splice( selectedPointIndex, 0, splicedPoint );
+    // var newVIndex = newIndex + 1;
+    // console.log("pointsModel[0].age: "+graphModel.pointsModel[0].age);
+    // console.log("pointsModel[1].age: "+graphModel.pointsModel[1].age);
+    // console.log("pointsModel.length: "+graphModel.pointsModel.length);
+    // console.log("newIndex: "+newIndex);
+    // // swap in graphModel.pointsModel
+    
+    
+    // swap in annotationIDs
+    var temp = annotationIDs[ newIndex ];
+    annotationIDs[ newIndex ] = annotationIDs[ index ];
+    annotationIDs[ index ] = temp;
+
+    // view
+    // points
+    console.log("SWAPPING");
+    console.log(graphModel.pointsModel);
+    console.log(selectedPointIndex);
+    series.data[ vIndex ].remove();
+    series.addPoint({
+      x: graphModel.pointsModel[ selectedPointIndex ].age,
+      y: graphModel.pointsModel[ selectedPointIndex ].happiness,
+      text: graphModel.pointsModel[ selectedPointIndex ].pointDescription
+    }, false, false, true);
+    // annotations
+    updateAnnotation( newIndex );
+
+    // redraw
+    console.log("redrawing from movePoint()");
+    myRedraw( false );
+
+  } else {
+    // update the point
+    graphModel.pointsModel[index].age = newXY[0];
+    graphModel.pointsModel[index].happiness = newXY[1];
+    series.data[vIndex].update({
+      x: graphModel.pointsModel[index].age,
+      y: graphModel.pointsModel[index].happiness
+    });
+    if ( annotationIDs[ selectedPointIndex ] !== undefined ) {
+      updateAnnotation( selectedPointIndex );
+    }
+    console.log("redrawing from movePoint()");
+    myRedraw( false );
+  }
+  // important business -- current=new and redraw
+  // plotXY = newXY;
+  adjustLastPointIfNeeded();
+  return;
+
+}
+// var removePoint = function( index ) {
+
+// }
+var switchToHeader = function( e ) {
+  console.log('switchToHeader start');
+  var index = e.data.index;
+  graphModel.pointsModel[ index ].pointDescription = $(this).val();
+  updateAnnotation( index );
+  editingAnno = false;
+  console.log('switchToHeader end');
+  return false;
+}
+var annoMouseUp = function( e ) {
+  if ( wasClick() ) {
+    switchToEditor( e );
+    return false;
+  } else {
+    return;
+  }
+}
+var switchToEditor = function ( e ) {
+
+  console.log('switchToEditor start');
+
+  editingAnno = true;
+  var index = e.data.index;
+  // generate new HTML to go into the annotation
+  var editorHTML = 
+    $('<input>')
+    .attr( 'id', annotationIDs[ index ]+'-editor' )
+    .attr( 'type', 'text' )
+    // .attr( 'onclick', '{ return false; }')
+    .prop('outerHTML');
+
+  // swap in the new html
+  lifeChart.removeAnnotation( annotationIDs[ index ] );
+  lifeChart.addAnnotation({
+    id: annotationIDs[ index ],
+    labelOptions: {
+      borderColor: 'rgba(255,0,0,0)',
+      backgroundColor: 'rgba(255,255,255,0.5)',
+      // justify: false,
+      crop: true,
+      shape: 'rect',
+      // backgroundColor: 'rgba(255,255,255,0.5)',
+      align: 'center',
+      // verticalAlign: 'top',
+      style: {
+          fontSize: '0.8em',
+          textOutline: '1px white'
+      },
+      useHTML: true
+      // y: 15
+    },
+    labels: [{
+      point: {
+        xAxis: 0,
+        yAxis: 0,
+        // x: 57.98,
+        // y: 25,
+        x: graphModel.pointsModel[ index ].age,
+        y: graphModel.pointsModel[ index ].happiness
+      },
+      text: editorHTML
+    }],
+    // zIndex: 10
+  });
+
+  // focus on editor
+  $('#'+annotationIDs[ index ]+'-editor')
+  .val( e.data.text )
+  .after( $('<input>').attr('type','text').attr('data-z-index','0.01') )
+  .on( 'mousedown', function() {  } )
+  // .focusout( e.data, switchToHeader )
+  .focus();
+  $('#container').off('mousedown');
+  // debugger;
+
+  return false;
+}
+var updateAnnotation = function( index ) {
+  if ( annotationIDs[ index ] === undefined
+    || graphModel.pointsModel[ index ].pointDescription === undefined ) {
+    return false;
+  }
+  var res = lifeChart.removeAnnotation( annotationIDs[ index ] );
+  var annotationHTML;
+  annotationHTML =
+    $('<div>')
+    .attr( 'id', annotationIDs[ index ] )
+    .append(
+      $('<span>')
+      .attr( 'id', annotationIDs[ index ]+'-header' )
+      .html( graphModel.pointsModel[ index ].pointDescription ))
+    .prop('outerHTML');
+  // console.log("res from remove: "+res);
+  res = lifeChart.addAnnotation({
+    id: annotationIDs[ index ],
+    labelOptions: {
+      borderColor: 'rgba(255,0,0,0)',
+      backgroundColor: 'rgba(255,255,255,0.5)',
+      // justify: false,
+      crop: true,
+      shape: 'rect',
+      // backgroundColor: 'rgba(255,255,255,0.5)',
+      align: 'center',
+      // verticalAlign: 'top',
+      style: {
+          fontSize: '0.8em',
+          textOutline: '1px white'
+      },
+      useHTML: true
+      // y: 15
+    },
+    labels: [{
+      point: {
+        xAxis: 0,
+        yAxis: 0,
+        // x: 57.98,
+        // y: 25,
+        x: graphModel.pointsModel[ index ].age,
+        y: graphModel.pointsModel[ index ].happiness
+      },
+      text: annotationHTML
+    }]
+  });
+
+  // newAnnotation.redraw();
+}
+var addNewAnnotation = function( index, text ) {
+  graphModel.pointsModel[index].pointDescription = text;
+  annotationIDs[index] = 'anno-'+(++numAnnotations);
+  updateAnnotation( index );
+  console.log("redraw from addNewAnnotation");
+  myRedraw( true );
+}
+
+
+var myRedraw = function( attachHandlers ) {
+  lifeChart.redraw();
+  if ( attachHandlers ) {
+    var i;
+    for ( i=0; i<graphModel.pointsModel.length; i++ ) {
+      $('#'+annotationIDs[ i ]+'-header')
+      // .on('mousedown', function() {
+      //   return false;
+      // })
+      // .on('mousedown', function() {
+      //   return true;
+      // })
+      // .on('click', function() { alert('click'); });
+      .on('mousedown', function() {
+        expectClick();
+        return false;
+      })
+      .on('mouseup', null, {
+        index: i,
+        text: graphModel.pointsModel[ i ].pointDescription
+      }, annoMouseUp );
+      // console.log( $('#'+annotationIDs[ i ]).css('backgroundColor') );
+      // if ( $('#'+annotationIDs[ i ]).css('backgroundColor') !== undefined ) {
+        // console.log("'twas already some color");
+        // console.log( $('#'+annotationIDs[ i ]).css('backgroundColor') );
+      // }
+      $('#'+annotationIDs[ i ]).css('backgroundColor','green');
+      // console.log( $('#'+annotationIDs[ i ]).css('backgroundColor') );
+    }
+  }
+}
+
 
 var lifeChart = Highcharts.chart('container', {
   chart: {
@@ -49,29 +376,26 @@ var lifeChart = Highcharts.chart('container', {
     type: 'spline',
     margin: [70, 50, 60, 80],
     events: {
-      click: function (e) {
+      // click: function (e) {
         // find the clicked values and the series
-        // var x = Math.round(e.xAxis[0].value),
-        //     y = Math.round(e.yAxis[0].value),
+        // var x = e.xAxis[0].value,
+        //     y = e.yAxis[0].value,
         //     series = this.series[0];
-        var x = e.xAxis[0].value,
-            y = e.yAxis[0].value,
-            series = this.series[0];
 
-        console.log(e);
+        // console.log(e);
 
         // if the user somehow clicked out of graph bounds
-        if (x < 0 || x > age || y < -60 || y > 60) {
-          return;
-        }
+        // if (x < 0 || x > age || y < -60 || y > 60) {
+        //   return;
+        // }
 
         // if the user clicked on an age that already has a point
-        var i;
-        for (i=0; i<series.data.length; i++) {
-          if (x === series.data[i].x) {
-            return;
-          }
-        }
+        // var i;
+        // for (i=0; i<series.data.length; i++) {
+        //   if (x === series.data[i].x) {
+        //     return;
+        //   }
+        // }
 
         // Add it
         // series.addPoint({
@@ -85,7 +409,7 @@ var lifeChart = Highcharts.chart('container', {
         // }, false, false, true);
         // this.redraw();
 
-      }
+      // }
     }
   },
   title: {
@@ -128,22 +452,55 @@ var lifeChart = Highcharts.chart('container', {
   legend: {
     enabled: false
   },
-  exporting: {
+  tooltip: {
     enabled: false
   },
+  // annotationsOptions: {
+  //   enabledButtons: false
+  // },
+  annotations: [{
+        labelOptions: {
+            backgroundColor: 'rgba(255,255,255,0.5)',
+            verticalAlign: 'top',
+            y: 15
+        },
+        labels: [{
+            point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 27.98,
+                y: 25
+            },
+            text: 'Arbois'
+        }]
+    }, {
+        labels: [{
+            point: {
+                xAxis: 0,
+                yAxis: 0,
+                x: 10.44,
+                y: 26
+            },
+            x: -30,
+            text: 'Col de la Joux'
+        }]
+    }],
+  // exporting: {
+  //   enabled: false
+  // },
   plotOptions: {
     // allowPointSelect: false,
     // allowPointSelect: true,
     series: {
       lineWidth: 1,
       point: {
-        events: {
-          'click': function () {
-            // if (this.series.data.length > 1) {
-            //   this.remove();
-            // }
-          }
-        }
+        // events: {
+        //   'click': function () {
+        //     // if (this.series.data.length > 1) {
+        //     //   this.remove();
+        //     // }
+        //   }
+        // }
       },
       marker: {
         enabled: true
@@ -153,11 +510,8 @@ var lifeChart = Highcharts.chart('container', {
       // shared options for all line series
     }
   },
-  tooltip: {
-    enabled: false
-  },
   series: [{
-    data: [{ x:0, y:0, marker:{radius:0} }, { x:age, y:0, point:false, marker:{radius:0} }]
+    data: [{ x:0, y:0, marker:{radius:0} }, /*{x:10,y:10,id:'high'},*/ { x:age, y:0, point:false, marker:{radius:0} }]
     // allowPointSelect: false
     // type: 'line'
   }]
@@ -200,15 +554,21 @@ var adjustLastPointIfNeeded = function() {
   var lastPointIndex = data.length - 1;
   if ( data[ lastPointIndex-1 ].y !== data[ lastPointIndex ].y ) {
     data[ lastPointIndex ].update( data[ lastPointIndex-1 ].y );
+    console.log("redrawing from adjustLastPointIfNeeded()");
+    myRedraw( false );
   }
 }
+  
+var containerMouseDown = function( e ) {
 
-$('#container').on('mousedown', function ( e ) {
+  if ( editingAnno ) {
+    // $(':focus').blur();
+    return;
+  }
+
   // useful shorthands from lifeChart object
   var series = lifeChart.series[0];
   var yAxis = lifeChart.yAxis[0];
-
-  // console.log(lifeChart);
 
   // find where on the plot was clicked
   plotNewXY = clickCoordsToPlotCoords( lifeChart.mouseDownX, lifeChart.mouseDownY );
@@ -222,7 +582,7 @@ $('#container').on('mousedown', function ( e ) {
   var i;
   var pointCoords;
   var nearbyPointIndex = undefined;
-  for (i=0; i<series.data.length; i++) { // (excludes first and last points)
+  for (i=0; i<series.data.length-1; i++) { // (last point is invisible)
     // console.log( series.data[i].x );
     pointCoords = plotCoordsToClickCoords( series.data[i].x, series.data[i].y );
     if (
@@ -236,20 +596,24 @@ $('#container').on('mousedown', function ( e ) {
       break;
     }
   }
-  console.log( nearbyPointIndex);
+  console.log("nearby point: "+nearbyPointIndex);
   // if the above loop found a nearby point, but it's unmovable, then do nothing
   if ( nearbyPointIndex === 0 || nearbyPointIndex === series.data.length-1 ) {
     console.log("doing nothing");
     console.log(plotNewXY);
     return;
   }
-  // if the above loop found a nearby point, and it's movable, then start editing that point
+  // if the above loop found a nearby point, and it's movable, then start editing point's position
+  // (with logic to allow point annotation to open if mouse goes up quickly before point is moved)
   if ( nearbyPointIndex !== undefined ) {
+    expectClick();
+    selectedPointIndex = nearbyPointIndex - 1;
     plotXY = [ series.data[nearbyPointIndex].x, series.data[nearbyPointIndex].y ];
     return;
   }
 
   // reject if the user clicked on an age that already has a point
+  // (possibly modify this in the future to make a point slightly to the right, but it's not important)
   var i;
   for (i=0; i<series.data.length; i++) {
     if ( plotNewXY[0] === series.data[i].x ) {
@@ -258,35 +622,29 @@ $('#container').on('mousedown', function ( e ) {
   }
 
   // add point
-  console.log("adding new point");
+  // console.log("mousedown -- adding new point");
   plotXY = plotNewXY;
-  series.addPoint({
-    x: plotXY[0],
-    y: plotXY[1],
-    // color: '#BF0B23',
-    // marker: { fillColor: '#BF0B23', radius: 10 },
-    // name: 'Point 1',
-    // color: '#00FF00',
-    // y: 0
-  }, false, false, true);
-  // console.log(series.data[1]);
-  lifeChart.redraw();
+  selectedPointIndex = addPoint( plotXY );
+  // console.log("mousedown -- selected point index: "+selectedPointIndex);
   adjustLastPointIfNeeded();
-  // console.log(series.data);
+}
+$('#container').on('mousedown', containerMouseDown);
 
-});
 
 $('#container').on('mousemove', function( e ) {
+
   // reject if mouse is just moving without being pressed
   if ( lifeChart.mouseIsDown === undefined || lifeChart.mouseIsDown === false ) {
     return;
   }
+
+  cancelClick();
+
   // reject if no point is currently grabbed
-  if ( plotXY === undefined ) {
+  if ( selectedPointIndex < 0 || plotXY === undefined ) {
     return;
   }
-  // console.log(plotXY);
-
+  
   // useful shorthands from lifeChart object
   var series = lifeChart.series[0];
   var yAxis = lifeChart.yAxis[0];
@@ -315,51 +673,33 @@ $('#container').on('mousemove', function( e ) {
     }
   }
 
-  // prepare to update the point-being-dragged by finding its index in the data list,
-  // as well as its limiting neighboring points
-  var pLowerIndex;
-  var pIndex;
-  var pUpperIndex;
-  for (pIndex=0; pIndex<series.data.length; pIndex++) {
-    if ( plotXY[0] === series.data[pIndex].x ) {
-      break; // pIndex is now the index of plotNewXY
-    }
-  }
-
-  // determine if the point should be updated at its current index, or re-added at a different index
-  if ( plotNewXY[0] < series.data[pIndex-1].x || plotNewXY[0] > series.data[pIndex+1].x ) {
-    // remove the point and re-add it (so it has the correct index)
-    series.data[pIndex].remove();
-    series.addPoint({
-      x: plotNewXY[0],
-      y: plotNewXY[1],
-    }, false, false, true);
-  } else {
-    // update the point
-    series.data[pIndex].update({
-      x: plotNewXY[0],
-      y: plotNewXY[1]
-    });
-  }
-  // important business -- current=new and redraw
-  plotXY = plotNewXY;
-  lifeChart.redraw();
-  adjustLastPointIfNeeded();
+  // move point
+  movePoint( selectedPointIndex, plotNewXY );
   return;
-
 });
 
 $('#container').on('mouseup', function( e ) {
-  // if a point was being grabbed, release it
+  if ( wasClick() ) {
+    if ( selectedPointIndex >= 0 && plotXY !== undefined ) {
+      // open annotation (unless it's already open)
+      if ( graphModel.pointsModel[ selectedPointIndex ].pointDescription !== undefined ) {
+        // do nothing
+      } else {
+        console.log("new annotation");
+        addNewAnnotation( selectedPointIndex, 'Falsetto-'+selectedPointIndex );
+      }
+    }
+  }
+  // release the point being grabbed (if there was any)
+  selectedPointIndex = -1;
   plotXY = undefined;
+  // redraw
+  if ( !editingAnno ) {
+    myRedraw( true );
+  }
 });
 
 
-
-var graphModel = {
-  phasesModel: [],
-  pointsModel: []
-};
 
 $("#buttonAddPhase").click(function() {
   // model
@@ -421,7 +761,18 @@ var submitForm = function( event ) {
   event.preventDefault();
   return false;
 }
-// alert("Hello");
+
+// $('#container').before( $('<input>').attr('type','text') );
+// $('#container').append( $('<input>').attr('type','text') );
+$('#container').append( $('<input>').attr('type','text').css('position','fixed') );
+$('.highcharts-container').append( $('<input>').attr('type','text').css('position','fixed') );
+$('.highcharts-root').append( $('<input>').attr('type','text') );
+$('.highcharts-background').append( $('<input>').attr('type','text') );
+$('.highcharts-plot-background').append( $('<input>').attr('type','text') );
+// $('svg').remove();
+
+
   </script>
 </body>
 </html>
+
