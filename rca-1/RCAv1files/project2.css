@@ -1,0 +1,76 @@
+body {
+    background-color: lightgray;
+    font-family: sans-serif;
+}
+h1 {
+    margin: 20px;
+}
+#main {
+    background-color: white;
+    max-width: 960px;
+    margin: auto;
+    text-align: center;
+}
+#subreddit-analyzer-form {
+
+}
+#input-area {
+    /*background-color: red;*/
+    font-size: 1.2em;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 8px;
+}
+#input-r {
+    display: inline;
+    /*background-color: green;*/
+    top: 10 6px;
+}
+#subreddit-input {
+    display: inline;
+    font-size: 0.8em;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 8px;
+}
+.general-analyze-button {
+    padding: 9.5px;
+    width: 140px;
+    margin: 0px;
+}
+#analyze-button {
+    display: inline;
+    font-size: 0.8em;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+#results-section {
+    text-align: left;
+    margin: 64px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+table {
+    /*border-spacing: 0px;*/
+    /*margin: 32px;*/
+    margin: auto;
+}
+th, td {
+    padding: 4px;
+}
+
+/*h1 {
+    text-align: center;
+}
+button {
+    width: 100px;
+}
+#posts {
+    text-align: center;
+}
+#current-image {
+    height: 70vh;
+}*/

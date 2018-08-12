@@ -5,12 +5,164 @@
     <title></title>
     <meta charset="utf-8">
     <meta http-equiv="Cache-Control" content="no-store" />
-    <!-- <link rel="stylesheet" href="index.css"> -->
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body>
-    <p>Ain't nothing here yet, but this <a href="backup/augment/augment.html">link</a></p>
-    <!-- <p>Also <a href="capstone/index.html">this link</a></p> -->
-    <p>Why is this folder called backup? <a href="lifeline-client/index.html">Lifeline</a></p>
+  <body onresize='onResize()'>
+    <div class='header'>
+      <!-- <h1>Header</h1> -->
+      <img class='img-horizontal-lines img-horizontal-lines-left' src='HorizontalLines.svg#svgView(preserveAspectRatio(none))' draggable='false'>
+      <img class='img-personal-logo' src='PersonalLogoLineFringes.svg' draggable='false'>
+      <img class='img-personal-logo' src='PersonalLogo.svg' draggable=''>
+      <img class='img-horizontal-lines img-horizontal-lines-right' src='HorizontalLines.svg#svgView(preserveAspectRatio(none))' draggable='false'>
+      <img id='img-vertical-line' class='img-vertical-line' src='VerticalLine.svg#svgView(preserveAspectRatio(none))' draggable='false'>
+    </div>
+    <div id='container' class='container'>
+      <div class='content item'>
+        <p>Welcome to my portfolio! I am a recent college graduate, beginning a career in web design and development. I want to make technology healthier for humanity. See my résumé in the panel on the right for details on my qualifications. On this site, I post work that is suitable for a portfolio.</p>
+        <p>In my free time, I play my accordion, climb rocks, and rewatch <i>Studio Ghibli</i> films.
+        <p>If you are interested in hiring me, please email me! As of August 2018, I am seeking employment in the Pacific Northwest area of the United States. I am open to contract work and working remotely as well.</p>
+        <h2 class='content-header'>Portfolio Works</h2>
+        <h3>Web Projects</h3>
+        <div class='project-container'>
+          <div id='rca-box' class='project-item' target='_blank'>
+            <h4 id='rca-name' class='project-item-name'>Reddit Community Analyzer</h4>
+            <!-- <img id='rca-img' src='Ripple.gif'> -->
+            <div id='rca-desc' class='project-item-desc'>A tool to analyze a subreddit's users, presented in an interface made with React.js.</div>
+            <p id='rca-p-a'>
+              <a id='rca-a-1' class='rca-a' href='rca-1/Reddit Community Analyzer.html' target='_blank'>Version 1</a>
+              <a id='rca-a-2' class='rca-a' href='RedditCommunityAnalyzer/RedditCommunityAnalyzer.html' target='_blank'>Version 2</a>
+            </p>
+          </div>
+          <a id='augment-box' href='augment/augment.html' class='project-item' target='_blank'>
+            <h4 id='augment-name' class='project-item-name'>Augment</h4>
+            <div id='augment-desc' class='project-item-desc'>A game of chord<br>identification by ear,<br>made only with jQuery.</div>
+          </a>
+          <a id='vo-box' href='vueothello/index.html' class='project-item' target='_blank'>
+            <h4 id='vo-name' class='project-item-name'>Vue Othello</h4>
+            <div id='vo-desc' class='project-item-desc'>A classic board game recreated in browser with Vue.js.</div>
+          </a>
+          <a id='pp-box' href='lifeline-client/index.html' class='project-item' target='_blank'>
+            <h4 id='pp-name' class='project-item-name'>The Perspective Project</h4>
+            <div id='pp-desc' class='project-item-desc'>Explore life stories and tell your own. Made with Highcharts, Firebase, and Firebase Cloud Functions.</div>
+          </a>
+          <a id='mars-box' href='mars/index.html' class='project-item' target='_blank'>
+            <h4 id='mars-name' class='project-item-name'>Mars</h4>
+            <div id='mars-desc' class='project-item-desc'>A simple narrative that<br>abuses CSS media queries.</div>
+          </a>
+          <!-- <div class='project-item'>
+            <h4 class='project-item-name'></h4>
+            <div class='project-item-desc'></div>
+          </div> -->
+        </div>
+
+        <h3>Other Miscellaneous Projects</h3>
+        <!-- Content -->
+        <div class='project-container'>
+          <div id='ttc-box' class='project-item' href='https://github.com/rtabler/RyanTabler_MAD/tree/master/Projects/project%201%20milestone%203' target='_blank'>
+            <h4 id='ttc-name' class='project-item-name'>Tao Te Ching</h4>
+            <div id='ttc-desc' class='project-item-desc'>An app to read different translations of the ancient Chinese text.</div>
+            <p id='ttc-p-a'>
+              <a id='ttc-a-1' class='ttc-a' href='https://github.com/rtabler/RyanTabler_MAD/tree/master/Projects/project%201%20milestone%203' target='_blank'>iOS</a>
+              <a id='ttc-a-2' class='ttc-a' href='https://github.com/rtabler/RyanTabler_MAD/tree/master/Projects/project2' target='_blank'>Android</a>
+            </p>
+          </div>
+          <a id='wr-box' class='project-item' href='https://youtu.be/sZ0trZqQvhg' target='_blank'>
+            <h4 id='wr-name' class='project-item-name'>WOMEN'S RIGHTS</h4>
+            <div id='wr-desc' class='project-item-desc'>A kinetic typography of Hillary Clinton's 1995 speech in Beijing, made with Adobe After Effects.</div>
+          </a>
+          <a id='ligo-box' class='project-item' href='https://youtu.be/yqMXtzWe03g' target='_blank'>
+            <h4 id='ligo-name' class='project-item-name'>LIGO</h4>
+            <div id='ligo-desc' class='project-item-desc'>An educational animation,<br>made with Adobe After Effects.</div>
+          </a>
+          <a id='song-box' class='project-item' href='https://soundcloud.com/user-254407568/sound-exercise-3-synth-call-and-response' target='_blank'>
+            <h4 id='song-name' class='project-item-name'>Call and Response</h4>
+            <div id='song-desc' class='project-item-desc'>MIDI music made with Reaper.</div>
+          </a>
+          <a id='hc-box' class='project-item' href='https://wordpress.com/post/ryta1742.wordpress.com/54' target='_blank'>
+            <h4 id='hc-name' class='project-item-name'>HARMOCHORD</h4>
+            <div id='hc-desc' class='project-item-desc'>An physical computing project to make an accordion-like musical instrument.</div>
+          </a>
+        </div>
+      </div>
+      <div id='sidebar' class='sidebar'>
+        <div id='sidebar-fixed-content' class='sidebar-fixed-content'>
+          <h2>Ryan Tabler</h2>
+          <img class='portrait' src='Portrait.jpg'>
+          <p class='resume-p'><a class='resume-a' href='Resume_RyanTabler_brand.pdf' target='_blank'>Résumé</a></p>
+          <p>
+            <a href='https://github.com/rtabler' class='a-link-logo' target='_blank'><img class='img-link-logo' src='github.svg'></a>
+            <a href='https://linkedin.com/in/ryan-tabler' class='a-link-logo' target='_blank'><img class='img-link-logo' src='linkedin.svg'></a>
+          </p>
+          <p><a id='myEmailLink'></a></p>
+          <p>(303)870-6605</p>
+        </div>
+      </div>
+    </div>
+
+    <script src='jquery-3.3.1.min.js'></script>
+    <script type="text/javascript">
+var user = 'ryan.tabler';
+var domain = 'colorado.edu';
+$('#myEmailLink').attr( 'href', 'mailto:'+user+'@'+domain );
+$('#myEmailLink').html( user+'@'+domain );
+
+var onResize = function() {
+  var body = document.body,
+      html = document.documentElement;
+  // var height = Math.max( body.scrollHeight, body.offsetHeight, 
+  //                        html.clientHeight, html.scrollHeight, html.offsetHeight );
+  var height = document.getElementById('container').offsetHeight + 130;
+  $('#img-vertical-line').css( 'height', (height - 150)+'px' );
+}
+onResize();
+
+$(document).on( 'scroll', function ( e ) {
+  // console.log($('#sidebar').offset().top);
+  if ( $(document).scrollTop() > $('#sidebar').offset().top - 22 ) {
+    if ( $(document).width() > 750 ) {
+      $('#sidebar-fixed-content').css( 'top', 22+'px' );
+      $('#sidebar-fixed-content').css( 'position', 'fixed' );      
+    }
+  } else {
+    $('#sidebar-fixed-content').css( 'position', 'inherit' );
+  }
+});
+
+// Reddit Community Analyzer version selection
+$('#rca-box').on( 'click', function ( e ) {
+  window.open( $('#rca-a-2').attr('href') );
+  e.preventDefault();
+  return false;
+});
+$('#rca-a-1').on( 'click', function ( e ) {
+  window.open( $('#rca-a-1').attr('href') );
+  e.preventDefault();
+  return false;
+});
+$('#rca-a-2').on( 'click', function ( e ) {
+  window.open( $('#rca-a-2').attr('href') );
+  e.preventDefault();
+  return false;
+});
+
+// Tao Te Ching version selection
+$('#ttc-box').on( 'click', function ( e ) {
+  window.open( $('#ttc-a-1').attr('href') );
+  e.preventDefault();
+  return false;
+});
+$('#ttc-a-1').on( 'click', function ( e ) {
+  window.open( $('#ttc-a-1').attr('href') );
+  e.preventDefault();
+  return false;
+});
+$('#ttc-a-2').on( 'click', function ( e ) {
+  window.open( $('#ttc-a-2').attr('href') );
+  e.preventDefault();
+  return false;
+});
+
+    </script>
   </body>
 </html>
   

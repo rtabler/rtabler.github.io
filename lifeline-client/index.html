@@ -234,6 +234,18 @@ var switchToEditor = function ( e ) {
     .prop('outerHTML');
 
   // swap in the new html
+  var newBoxCorner = plotCoordsToClickCoords( 0, 0 );
+  console.log(newBoxCorner);
+  $('#container').prepend( $('<input>')
+    .attr('type','text')
+    .css('position','absolute')
+    .css('top', newBoxCorner[0]+'px')
+    .css('left', newBoxCorner[1]+'px')
+    .css('z-index', 1)
+    // .css('top','10px')
+  );
+
+
   lifeChart.removeAnnotation( annotationIDs[ index ] );
   lifeChart.addAnnotation({
     id: annotationIDs[ index ],
@@ -416,7 +428,7 @@ var lifeChart = Highcharts.chart('container', {
     text: 'User supplied data'
   },
   subtitle: {
-    text: 'Click the plot area to add a point. Click a point to remove it.'
+    text: 'Add and move points by clicking and dragging.'
   },
   xAxis: {
     gridLineWidth: 1,
@@ -492,6 +504,7 @@ var lifeChart = Highcharts.chart('container', {
     // allowPointSelect: false,
     // allowPointSelect: true,
     series: {
+      color: 'black',
       lineWidth: 1,
       point: {
         // events: {
@@ -764,11 +777,10 @@ var submitForm = function( event ) {
 
 // $('#container').before( $('<input>').attr('type','text') );
 // $('#container').append( $('<input>').attr('type','text') );
-$('#container').append( $('<input>').attr('type','text').css('position','fixed') );
-$('.highcharts-container').append( $('<input>').attr('type','text').css('position','fixed') );
-$('.highcharts-root').append( $('<input>').attr('type','text') );
-$('.highcharts-background').append( $('<input>').attr('type','text') );
-$('.highcharts-plot-background').append( $('<input>').attr('type','text') );
+// $('.highcharts-container').append( $('<input>').attr('type','text').css('position','fixed') );
+// $('.highcharts-root').append( $('<input>').attr('type','text') );
+// $('.highcharts-background').append( $('<input>').attr('type','text') );
+// $('.highcharts-plot-background').append( $('<input>').attr('type','text') );
 // $('svg').remove();
 
 

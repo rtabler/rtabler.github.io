@@ -1,0 +1,116 @@
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+#screen {
+    background: url(img-01.jpg);
+    position: absolute;
+    width: 1280px;
+    height: 720px;
+}
+#instruction-text {
+    position: absolute;
+    font-family: "Constantia", serif;
+    font-style: italic;
+    font-size: 20px;
+    top: 110px;
+    left: 330px;
+    text-align: center;
+    color: lightgray;
+    opacity: 1;
+}
+#end-text-1 {
+    position: absolute;
+    font-family: "Constantia", serif;
+    font-style: italic;
+    font-size: 20px;
+    top: -40px;
+    left: 160px;
+    opacity: 0;
+}
+#end-text-2 {
+    position: absolute;
+    font-family: "Constantia", serif;
+    font-style: italic;
+    font-size: 20px;
+    top: -40px;
+    left: 960px;
+    opacity: 0;
+    -ms-transform: rotate(-20deg); /* IE 9 */
+    -webkit-transform: rotate(-20deg); /* Chrome, Safari, Opera */
+    transform: rotate(-20deg);
+}
+
+/* Preload all required images into unseen elements */
+#preload-02 { background: url(img-02.jpg) no-repeat -9999px -9999px; }
+#preload-03 { background: url(img-03.jpg) no-repeat -9999px -9999px; }
+#preload-04 { background: url(img-04.jpg) no-repeat -9999px -9999px; }
+#preload-05 { background: url(img-05.jpg) no-repeat -9999px -9999px; }
+#preload-06 { background: url(img-06.jpg) no-repeat -9999px -9999px; }
+#preload-07 { background: url(img-07.jpg) no-repeat -9999px -9999px; }
+#preload-08 { background: url(img-08.jpg) no-repeat -9999px -9999px; }
+#preload-09 { background: url(img-09.jpg) no-repeat -9999px -9999px; }
+#preload-10 { background: url(img-10.jpg) no-repeat -9999px -9999px; }
+#preload-11 { background: url(img-11.jpg) no-repeat -9999px -9999px; }
+#preload-12 { background: url(img-12.jpg) no-repeat -9999px -9999px; }
+#preload-13 { background: url(img-13.jpg) no-repeat -9999px -9999px; }
+#preload-14 { background: url(img-14.jpg) no-repeat -9999px -9999px; }
+#preload-15 { background: url(img-15.jpg) no-repeat -9999px -9999px; }
+#preload-16 { background: url(img-16.jpg) no-repeat -9999px -9999px; }
+#preload-17 { background: url(img-17.jpg) no-repeat -9999px -9999px; }
+#preload-18 { background: url(img-18.jpg) no-repeat -9999px -9999px; }
+#preload-19 { background: url(img-19.jpg) no-repeat -9999px -9999px; }
+#preload-20 { background: url(img-20.jpg) no-repeat -9999px -9999px; }
+#preload-21 { background: url(img-21.jpg) no-repeat -9999px -9999px; }
+#preload-22 { background: url(img-22.jpg) no-repeat -9999px -9999px; }
+#preload-23 { background: url(img-23.jpg) no-repeat -9999px -9999px; }
+#preload-24 { background: url(img-24.jpg) no-repeat -9999px -9999px; }
+#preload-25 { background: url(img-25.jpg) no-repeat -9999px -9999px; }
+#preload-26 { background: url(img-26.jpg) no-repeat -9999px -9999px; }
+
+/* Main image animation */
+@media (max-width: 1280px) { #screen { background: url(img-01.jpg); } }
+@media (max-width: 1248px) { #screen { background: url(img-02.jpg); } }
+@media (max-width: 1216px) { #screen { background: url(img-03.jpg); } }
+@media (max-width: 1184px) { #screen { background: url(img-04.jpg); } }
+@media (max-width: 1152px) { #screen { background: url(img-05.jpg); } }
+@media (max-width: 1120px) { #screen { background: url(img-06.jpg); } }
+@media (max-width: 1088px) { #screen { background: url(img-07.jpg); } }
+@media (max-width: 1056px) { #screen { background: url(img-08.jpg); } }
+@media (max-width: 1024px) { #screen { background: url(img-09.jpg); } }
+@media (max-width: 992px) { #screen { background: url(img-10.jpg); } }
+@media (max-width: 960px) { #screen { background: url(img-11.jpg); } }
+@media (max-width: 928px) { #screen { background: url(img-12.jpg); } }
+@media (max-width: 896px) { #screen { background: url(img-13.jpg); } }
+@media (max-width: 864px) { #screen { background: url(img-14.jpg); } }
+@media (max-width: 832px) { #screen { background: url(img-15.jpg); } }
+@media (max-width: 800px) { #screen { background: url(img-16.jpg); } }
+@media (max-width: 768px) { #screen { background: url(img-17.jpg); } }
+@media (max-width: 736px) { #screen { background: url(img-18.jpg); } }
+@media (max-width: 704px) { #screen { background: url(img-19.jpg); } }
+@media (max-width: 672px) { #screen { background: url(img-20.jpg); } }
+@media (max-width: 640px) { #screen { background: url(img-21.jpg); } }
+@media (max-width: 608px) { #screen { background: url(img-22.jpg); } }
+@media (max-width: 576px) { #screen { background: url(img-23.jpg); } }
+@media (max-width: 544px) { #screen { background: url(img-24.jpg); } }
+@media (max-width: 512px) { #screen { background: url(img-25.jpg); } }
+@media (max-width: 480px) { #screen { background: url(img-26.jpg); } }
+
+/* Text animations */
+@media (max-width: 1152px) {
+    #instruction-text { opacity: 0; transition: opacity 1s; }
+}
+@media (max-width: 512px) {
+    #end-text-1 { display: block; opacity: 1; transition: opacity 1s; }
+}
+@media (max-width: 1056px) {
+    #end-text-2 { opacity: 0; transition: opacity 1s; }
+}
+@media (min-width: 1056px) {
+    #end-text-2 { opacity: 1; transition: opacity 2s; }
+}
+
+
+

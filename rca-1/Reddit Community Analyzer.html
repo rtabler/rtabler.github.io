@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)http://creative.colorado.edu/~ryta1742/fwd/project2/project2.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Reddit Community Analyzer</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="./RCAv1files/project2.css" rel="stylesheet">
+    </head>
+    <body cz-shortcut-listen="true">
+        <div id="main">
+            <h1>Reddit Community Analyzer</h1>
+            <div>See where else your users post.</div>
+            <h2>Enter a subreddit:</h2>
+            <!-- <br> -->
+            <div id="input-area">
+                <span id="input-r">/r/</span>
+                <input id="subreddit-input" type="text" size="20" maxlength="20">
+                <button id="analyze-button" class="general-analyze-button" type="submit">ANALYZE</button>
+            </div>
+            <!-- <h2>Info:</h2> -->
+            <div id="info-area" style="display: none;">
+                <h3 id="info-header"><a id="info-link">/r/</a> <span id="info-header-subs"><span></span></span></h3>
+                <!-- Subscribers: <span id="subscribers">0</span> -->
+            </div>
+            <div id="results-section">
+                <h2 id="results-header" style="display: none;">Results:</h2>
+                <!-- <div id="">Users analyzed: <span id="info-users">0</span></div> -->
+                <div id="results-stage"></div>
+                <br>
+                <table id="results-table" style="display: none;">
+                    <tbody><tr>
+                        <th>Rank</th>
+                        <th>Subreddit</th>
+                        <!-- <th>Score?</th> -->
+                        <th>Analyze!</th>
+                    </tr>
+                </tbody></table>
+            </div>
+        </div>
+        <script src="./RCAv1files/jquery-3.2.1.min.js" type="text/javascript">
+        </script>
+        <script src="./RCAv1files/project2.js"></script>
+    
+
+</body></html>

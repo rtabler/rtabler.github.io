@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+    <head>
+        <title>Augment</title>
+        <meta charset="utf-8">
+        <meta http-equiv="Cache-Control" content="no-store" />
+        <link rel="stylesheet" href="augment.css">
+            <!-- polyfill -->
+        <script src="MIDI.js-master/inc/shim/Base64.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/inc/shim/Base64binary.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+        <!-- midi.js package -->
+        <script src="MIDI.js-master/js/midi/audioDetect.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/js/midi/gm.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/js/midi/loader.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/js/midi/plugin.audiotag.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/js/midi/plugin.webaudio.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/js/midi/plugin.webmidi.js" type="text/javascript"></script>
+        <!-- utils -->
+        <script src="MIDI.js-master/js/util/dom_request_xhr.js" type="text/javascript"></script>
+        <script src="MIDI.js-master/js/util/dom_request_script.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <h1>Augment</h1>
+        <!-- <div>This project has audio</div> -->
+        <!--h2></h2-->
+        <!-- <button id="soundbox" class="block" onclick="newChord()">New Chord</button> -->
+        <div id="visualizer">
+            <div id="vs-0" class="visualizer-section">
+                <div id="vs-0-guess" class="vs-guess"></div>
+                <div id="vs-0-ans" class="vs-ans"></div>
+            </div>
+            <div id="vs-1" class="visualizer-section">
+                <div id="vs-1-guess" class="vs-guess"></div>
+                <div id="vs-1-ans" class="vs-ans"></div>
+            </div>
+            <div id="vs-2" class="visualizer-section">
+                <div id="vs-2-guess" class="vs-guess"></div>
+                <div id="vs-2-ans" class="vs-ans"></div>
+            </div>
+            <div id="vs-3" class="visualizer-section">
+                <div id="vs-3-guess" class="vs-guess"></div>
+                <div id="vs-3-ans" class="vs-ans"></div>
+            </div>
+            <button id="starter" onclick="firstChord()">Click to begin guessing the chords that play.</button>
+        </div>
+        <div id="input">
+            <div id="bassplate" class="block">
+            </div>
+
+            <!--div id="input-keyboard" class="block">
+                <button id="note-C"  class="input-key white-key" onclick="noteC()" >
+                    <div class="white-label">C</div>
+                </button>
+                <button id="note-D"  class="input-key white-key" onclick="noteD()" >
+                    <div class="white-label">D</div>
+                </button>
+                <button id="note-E"  class="input-key white-key" onclick="noteE()" >
+                    <div class="white-label">E</div>
+                </button>
+                <button id="note-F"  class="input-key white-key" onclick="noteF()" >
+                    <div class="white-label">F</div>
+                </button>
+                <button id="note-G"  class="input-key white-key" onclick="noteG()" >
+                    <div class="white-label">G</div>
+                </button>
+                <button id="note-A"  class="input-key white-key" onclick="noteA()" >
+                    <div class="white-label">A</div>
+                </button>
+                <button id="note-B"  class="input-key white-key" onclick="noteB()" >
+                    <div class="white-label">B</div>
+                </button>
+                <button id="note-CD" class="input-key black-key" onclick="noteCD()">
+                    <div class="black-label">C#<br>Db</div>
+                </button>
+                <button id="note-DE" class="input-key black-key" onclick="noteDE()">
+                    <div class="black-label">D#<br>Eb</div>
+                </button>
+                <button id="note-FG" class="input-key black-key" onclick="noteFG()">
+                    <div class="black-label">F#<br>Gb</div>
+                </button>
+                <button id="note-GA" class="input-key black-key" onclick="noteGA()">
+                    <div class="black-label">G#<br>Ab</div>
+                </button>
+                <button id="note-AB" class="input-key black-key" onclick="noteAB()">
+                    <div class="black-label">A#<br>Bb</div>
+                </button>
+            </div>
+            <div id="chordtype" class="block">
+                <button id="chord-maj" class="chordtypeButton" onclick="chordMaj()">Major</button>
+                <button id="chord-min" class="chordtypeButton" onclick="chordMin()">Minor</button>
+                <button id="chord-dom7" class="chordtypeButton" onclick="chordDom7()">Dominant 7th</button>
+                <button id="chord-dim7" class="chordtypeButton" onclick="chordDim7()">Diminished 7th</button>
+            </div>-->
+        </div>
+        <div id="feedback" class="block">
+            <div id="inner-feedback"></div>
+            <button id="btRepeat" class="block" onclick="btRepeatOnclick()">Repeat chord</button>
+            <button id="btNext" class="block" onclick="btNextOnclick()">Next chord</button>
+
+        </div>
+        <!--script src="basic-piano-with-web-audio-api/js/index.js"></script-->
+        <script src="jquery-3.2.1.min.js"></script>
+        <script src="augment.js"></script>
+        <!--script src="MIDI.js-master/js/" type="text/javascript"></script-->
+    </body>
+</html>
+
