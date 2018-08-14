@@ -100,7 +100,8 @@ window.onload = function() {
         onsuccess: function() {
             // $("#visualizer").css("visibility","visible");
             setTimeout(function(){
-                $("#visualizer").css("opacity","1");
+                $('#starter').html('Click to begin guessing the chords that play.');
+                $("#starter").css("opacity","1");
             }, 5000);
         }
     });

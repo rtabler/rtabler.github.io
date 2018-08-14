@@ -44,8 +44,8 @@ h1 {
     height: 92px;
     border-style: solid;
     border-width: 4px;
-    opacity: 0;
-    transition: opacity 1s;
+    opacity: 1;
+    /*transition: opacity 1s;*/
 }
 .visualizer-section {
     background-color: blue;
