@@ -113,13 +113,9 @@ for (var i=0; i<4; i++) {
     $("#vs-"+i).css("left",(i*140)+"px");
 }
 // Draw the parts of the UI that depend on settings
-$("#bassplate").css("background-color", "yellow");
 // Create bassplate and bass buttons
-$("#bassplate").css("box-sizing","border-box");
 $("#bassplate").height(chordQualitiesToTest.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
 $("#bassplate").width(chordButtonsToShow.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
-// $("#bassplate").width(bassBtnSize+"px")
-$("#bassplate").css("position","relative");
 for (i=0; i<chordQualitiesToTest.length; i++) {
     for (j=0; j<chordButtonsToShow.length; j++) {
         var cssFriendlyRootNote = (chordButtonsToShow[j].substr(-1)=='#')? chordButtonsToShow[j].substr(0,1)+'s' : chordButtonsToShow[j];

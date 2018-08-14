@@ -83,11 +83,15 @@ h1 {
     border-color: black;
 }
 #bassplate {
-    background-color: red;
+    background-color: yellow;
+    position: relative;
+    box-sizing: border-box;
     width: 960px;
     height: 200px;
-    box-sizing: border-box;
 }
+
+
+/* old code from keyboard mode */
 #input-keyboard {
     background-color: orange;
     position: relative;
