@@ -7,6 +7,7 @@ var chordQualitiesToTest = ["maj","min","dom7"];
 var chordRootsToTest   =      ['Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#'];
 var chordButtonsToShow = ['Gb','Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#','C#','G#','D#','A#'];
 // Settings that won't change much
+var bassplatePadding = 4;
 var bassBtnSize = 57;
 var bassBtnSpacing = 10;
 
@@ -20,6 +21,7 @@ var currentGuessIndex = 0;
 var currentChordProgression = [];
 
 // Global data / lookup
+var loaded = false;
 var qualityToNumberMap = function(q) {
     if      (q==="maj"  ) return [0,4,7];
     else if (q==="min"  ) return [0,3,7];
@@ -101,7 +103,7 @@ window.onload = function() {
             // $("#visualizer").css("visibility","visible");
             setTimeout(function(){
                 $('#starter').html('Click to begin guessing the chords that play.');
-                $("#starter").css("opacity","1");
+                loaded = true;
             }, 5000);
         }
     });
@@ -282,7 +284,8 @@ var newChordProgression = function() {
     playChordProgression(currentChordProgression,true); // loops
 }
 var firstChord = function() {
-    // Called when "click to begin" is pressed
+    // Called when #starter is pressed
+    if (!loaded) return;
     if (begun) return;
     begun = true;
     $("#starter").css("opacity","0");
@@ -397,8 +400,16 @@ for (var i=0; i<4; i++) {
 }
 // Draw the parts of the UI that depend on settings
 // Create bassplate and bass buttons
-$("#bassplate").height(chordQualitiesToTest.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
-$("#bassplate").width(chordButtonsToShow.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
+$("#bassplate").height(
+    bassplatePadding+bassplatePadding
+    + chordQualitiesToTest.length * (bassBtnSize+bassBtnSpacing)
+    + bassBtnSpacing+"px"
+);
+$("#bassplate").width(
+    bassplatePadding+bassplatePadding
+    + chordButtonsToShow.length * (bassBtnSize+bassBtnSpacing)
+    + bassBtnSpacing+"px"
+);
 for (i=0; i<chordQualitiesToTest.length; i++) {
     for (j=0; j<chordButtonsToShow.length; j++) {
         var cssFriendlyRootNote = (chordButtonsToShow[j].substr(-1)=='#')? chordButtonsToShow[j].substr(0,1)+'s' : chordButtonsToShow[j];
@@ -410,23 +421,18 @@ for (i=0; i<chordQualitiesToTest.length; i++) {
         $('#bassplate').append(
             $('<button>')
             .attr('id', newButtonId)
-            .attr('class', 'bass-btn')
+            .addClass('bass-btn')
             .on('click', bassBtnOnclickData, bassBtnOnclick)
             .html( chordButtonsToShow[j]+chordQualitiesToTest[i] )
         );
-        $("#"+newButtonId).css("background-color","pink");
-        // $("#"+newButtonId).text("con");
-        $("#"+newButtonId).css("display","block");
-        $("#"+newButtonId).css("position","absolute");
-        $("#"+newButtonId).css("top",(i*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
-        $("#"+newButtonId).css("left",(j*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
+        $("#"+newButtonId).css("top",(bassplatePadding+i*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
+        $("#"+newButtonId).css("left",(bassplatePadding+j*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
     }
 }
 $(".bass-btn").css("width",bassBtnSize+"px");
 $(".bass-btn").css("height",bassBtnSize+"px");
-$(".bass-btn").css("border-radius","100px");
 $("#bass-btn-C-maj").css("border-style","solid");
-$("#bass-btn-C-maj").css("border-color","black");
-$("#bass-btn-C-maj").css("border-width","3px");
+$("#bass-btn-C-maj").css("border-color","gold");
+$("#bass-btn-C-maj").css("border-width","6px");
 // $("#bassplate").append("<button>But</button>");
 

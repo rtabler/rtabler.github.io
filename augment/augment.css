@@ -1,5 +1,5 @@
 body {
-    background-color: #ccccff;
+    background-color: lightgrey;
     display: block;
     position: relative;
     margin: auto;
@@ -28,6 +28,7 @@ h1 {
     width: 560px;
     height: 92px;
     border: none;
+    border-radius: 12px;
     text-align: center;
     font-size: 16pt;
     outline: none;
@@ -36,7 +37,7 @@ h1 {
     transition: opacity 1s;
 }
 #visualizer {
-    background-color: white;
+    background-color: black;
     display: block;
     position: relative;
     margin: auto;
@@ -44,6 +45,7 @@ h1 {
     height: 92px;
     border-style: solid;
     border-width: 4px;
+    border-radius: 12px;
     opacity: 1;
     /*transition: opacity 1s;*/
 }
@@ -58,6 +60,7 @@ h1 {
     top: 0px;
     border-style: solid;
     border-width: 4px;
+    border-radius: 12px;
     text-align: center;
     box-sizing: border-box;
     /*opacity: 0;*/
@@ -83,11 +86,25 @@ h1 {
     border-color: black;
 }
 #bassplate {
-    background-color: yellow;
+    background-color: #B70030;
     position: relative;
     box-sizing: border-box;
+    margin: 8px;
+    margin-top: 16px;
+    border-radius: 32px;
     width: 960px;
     height: 200px;
+}
+.bass-btn {
+    background-color: white;
+    display: block;
+    position: absolute;
+    padding: 0;
+    border-width: 3px;
+    border-radius: 100px;
+    font-weight: bold;
+    font-family: 'MaestroTimes';
+    font-size: 0.9em;
 }
 
 
