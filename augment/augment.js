@@ -108,35 +108,6 @@ window.onload = function() {
 }
 
 
-for (var i=0; i<4; i++) {
-    $("#vs-"+i).css("background-color","white");
-    $("#vs-"+i).css("left",(i*140)+"px");
-}
-// Draw the parts of the UI that depend on settings
-// Create bassplate and bass buttons
-$("#bassplate").height(chordQualitiesToTest.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
-$("#bassplate").width(chordButtonsToShow.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
-for (i=0; i<chordQualitiesToTest.length; i++) {
-    for (j=0; j<chordButtonsToShow.length; j++) {
-        var cssFriendlyRootNote = (chordButtonsToShow[j].substr(-1)=='#')? chordButtonsToShow[j].substr(0,1)+'s' : chordButtonsToShow[j];
-        var newButtonId = "bass-btn-"+cssFriendlyRootNote+"-"+chordQualitiesToTest[i]+"";
-        var newButtonOnclick = "bassBtnOnclick(\'"+chordButtonsToShow[j]+"\',\'"+chordQualitiesToTest[i]+"\')";
-        $("#bassplate").append("<button id=\""+newButtonId+"\" class=\"bass-btn\" onclick=\""+newButtonOnclick+"\">"+chordButtonsToShow[j]+chordQualitiesToTest[i]+"</button>");
-        $("#"+newButtonId).css("background-color","pink");
-        // $("#"+newButtonId).text("con");
-        $("#"+newButtonId).css("display","block");
-        $("#"+newButtonId).css("position","absolute");
-        $("#"+newButtonId).css("top",(i*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
-        $("#"+newButtonId).css("left",(j*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
-    }
-}
-$(".bass-btn").css("width",bassBtnSize+"px");
-$(".bass-btn").css("height",bassBtnSize+"px");
-$(".bass-btn").css("border-radius","100px");
-$("#bass-btn-C-maj").css("border-style","solid");
-$("#bass-btn-C-maj").css("border-color","black");
-$("#bass-btn-C-maj").css("border-width","3px");
-// $("#bassplate").append("<button>But</button>");
 
 
 
@@ -373,12 +344,15 @@ var _bassBtnOnclick = function(root, quality) {
 
     gradeChordAndDoFeedback(root, quality);
 }
-var bassBtnOnclick = function(root, quality) {
+var bassBtnOnclick = function( e ) {
     // Called when one of the bass buttons is pressed.
+
+    var root = e.data.root;
+    var quality = e.data.quality;
 
     // If nothing is playing yet, then play the chord for the button pressed
     if (!chordIsPlaying) {
-        playChord(root,quality,false); // doesn't loop
+        playChord( root, quality, false ); // doesn't loop
         return;
     }
 
@@ -415,4 +389,44 @@ var btNextOnclick = function() {
 
 
 
+
+
+for (var i=0; i<4; i++) {
+    $("#vs-"+i).css("background-color","white");
+    $("#vs-"+i).css("left",(i*140)+"px");
+}
+// Draw the parts of the UI that depend on settings
+// Create bassplate and bass buttons
+$("#bassplate").height(chordQualitiesToTest.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
+$("#bassplate").width(chordButtonsToShow.length*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing+"px");
+for (i=0; i<chordQualitiesToTest.length; i++) {
+    for (j=0; j<chordButtonsToShow.length; j++) {
+        var cssFriendlyRootNote = (chordButtonsToShow[j].substr(-1)=='#')? chordButtonsToShow[j].substr(0,1)+'s' : chordButtonsToShow[j];
+        var newButtonId = "bass-btn-"+cssFriendlyRootNote+"-"+chordQualitiesToTest[i]+"";
+        var bassBtnOnclickData = {
+            root: chordButtonsToShow[j],
+            quality: chordQualitiesToTest[i]
+        };
+        $('#bassplate').append(
+            $('<button>')
+            .attr('id', newButtonId)
+            .attr('class', 'bass-btn')
+            .on('click', bassBtnOnclickData, bassBtnOnclick)
+            .html( chordButtonsToShow[j]+chordQualitiesToTest[i] )
+        );
+        $("#"+newButtonId).css("background-color","pink");
+        // $("#"+newButtonId).text("con");
+        $("#"+newButtonId).css("display","block");
+        $("#"+newButtonId).css("position","absolute");
+        $("#"+newButtonId).css("top",(i*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
+        $("#"+newButtonId).css("left",(j*(bassBtnSize+bassBtnSpacing)+bassBtnSpacing)+"px");
+    }
+}
+$(".bass-btn").css("width",bassBtnSize+"px");
+$(".bass-btn").css("height",bassBtnSize+"px");
+$(".bass-btn").css("border-radius","100px");
+$("#bass-btn-C-maj").css("border-style","solid");
+$("#bass-btn-C-maj").css("border-color","black");
+$("#bass-btn-C-maj").css("border-width","3px");
+// $("#bassplate").append("<button>But</button>");
 
