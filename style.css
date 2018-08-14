@@ -156,6 +156,7 @@ img {
   }
 }
 .sidebar-fixed-content {
+  box-sizing: border-box;
   background-color: white;
   display: block;
   /*position: fixed;*/
