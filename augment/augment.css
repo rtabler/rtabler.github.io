@@ -85,12 +85,18 @@ h1 {
     border-width: 5px;
     border-color: black;
 }
+#input {
+    box-sizing: border-box;
+    margin-top: 16px;
+    margin-left: 8px;
+    margin-right: 8px;
+    width: calc(100% - 8px - 8px);
+    overflow: scroll;
+}
 #bassplate {
     background-color: #B70030;
     position: relative;
     box-sizing: border-box;
-    margin: 8px;
-    margin-top: 16px;
     border-radius: 32px;
     width: 960px;
     height: 200px;
@@ -181,17 +187,27 @@ h1 {
 }
 #feedback {
     /*background-color: green;*/
-    width: 630px;
+    max-width: 560px;
     height: 100px;
     margin-top: 15px;
     margin-bottom: 15px;
     border-style: solid;
     border-width: 4px;
+    border-radius: 12px;
     border-color: black;
     text-align: center;
     visibility: hidden;
 }
+.feedback-buttons {
+    width: 160px;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 12px;
+    padding: 8px;
+    font-size: 1em;
+}
+#btRepeat {
+}
 #btNext {
     /*visibility: hidden;*/
-    border-width: 2px;
 }
