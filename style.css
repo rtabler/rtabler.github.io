@@ -156,10 +156,10 @@ img {
   }
 }
 .sidebar-fixed-content {
-  box-sizing: border-box;
   background-color: white;
   display: block;
   /*position: fixed;*/
+  /*box-sizing: border-box;*/
   margin: auto;
   padding: 16px;
   text-align: center;
