@@ -354,11 +354,18 @@ img {
   margin-left: 50px;
 }
 #wr-box {
-  background-color: #FEC0E6;
+  /*background-color: #FEC0E6;*/
+  background-image: url(wr-bg.jpg);
+  background-size: 100%;
 } #wr-name {
+  margin-top: 34px;
+  margin-bottom: 0px;
   font-family: Optima, sans-serif;
+  font-size: 2.4em;
 } #wr-desc {
+  margin-top: 0px;
   font-family: Optima, sans-serif;
+  text-align: center;
 }
 #ligo-box {
   background-color: black;
