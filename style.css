@@ -332,21 +332,21 @@ img {
   /*font-family: 'Rubik Mono One';*/
   margin-top: 0.3em;
   margin-bottom: 0.5em;
-  font-size: 1.2em;
+  font-size: 1.5em;
   line-height: 1.5em;
 } #ttc-img {
   /*display: block;*/
   /*margin: auto;*/
   /*width: 50px;*/
 } #ttc-desc {
-  margin-top: 28px;
+  margin-top: 36px;
   margin-left: 8px;
   margin-right: 8px;
   line-height: 1.2em;
   text-align: center;
   font-family: 'Hind Guntur Regular';
 } #ttc-p-a {
-  margin-top: 36px;
+  margin-top: 44px;
 } .ttc-a {
   color: black;
 } #ttc-a-1 {
