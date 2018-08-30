@@ -308,11 +308,12 @@ img {
   background-color: black;
 } #mars-name {
   color: rgb(160,60,24);
-  font-size: 4em;
-  margin-top: 62px;
+  font-size: 5em;
+  margin-top: 52px;
   margin-bottom: 24px;
 } #mars-desc {
   color: lightgrey;
+  margin-top: 36px;
   text-align: center;
 }
 #ttc-name {
@@ -362,13 +363,14 @@ img {
 #ligo-box {
   background-color: black;
 } #ligo-name {
-  margin-top: 65px;
-  margin-bottom: 30px;
+  margin-top: 60px;
+  margin-bottom: 0px;
   font-family: 'Crimson Text Bold', serif;
   color: #4692df;
-  font-size: 3em;
+  font-size: 4em;
 } #ligo-desc {
   color: grey;
+  margin-top: 8px;
   text-align: center;
 }
 #song-box {
