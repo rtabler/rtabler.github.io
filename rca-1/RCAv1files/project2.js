@@ -1,5 +1,4 @@
 
-
 // options and settings
 var comment_depth = 4; // How deep to go in nested comment threads
 var count_multiple_posts = false;
@@ -112,17 +111,12 @@ var keepCrunchingNumbers = function() {
         delete condensed_subreddit_data[highestActivitySubreddit];
     }
 
-
-    // for (var i=0; i<100; i++) {
-    //     console.log(sorted_subs[i]["active_users"]);
-    //     sorted_subs[i]["activity"] = sorted_subs[i]["post_count"] / sorted_subs[i]["active_users"]
-    // }
-    showStage("Done! X users analyzed.");
+    var numUsersAnalyzed = Object.keys(all_data).length;
+    showStage("Done! "+numeral( numUsersAnalyzed ).format('0,0')+" users analyzed.");
     $("#subreddit-input").removeAttr("disabled");
     $("#analyze-button").html("ANALYZE");
     $("#analyze-button").removeAttr("disabled");
     $("#results-table").show();
-    // console.log(sorted_subs);
     displayResults();
 }
 
@@ -135,7 +129,6 @@ var asyncTrackerReadAbout = function(change) {
 }
 var crunchNumbers = function() {
     showStage("Crunching data...");
-    // console.log(all_data);
     asyncTrackerReadAbout(1);
     for (var user in all_data) {
         for (var subreddit in all_data[user]["subreddits"]) {
@@ -143,7 +136,7 @@ var crunchNumbers = function() {
                 //
                 condensed_subreddit_data[subreddit] = {};
                 condensed_subreddit_data[subreddit]["count"] = 0;
-                console.log(pending_async_about_calls);
+                // console.log(pending_async_about_calls);
                 asyncTrackerReadAbout(1);
                 $.ajax({
                     dataType: "json",
@@ -197,7 +190,7 @@ var collectSubreddits = function() {
             },
             this_user: user,
             success: function (response) {
-                console.log("Posts gotten from this user: "+response.data.children.length)
+                // console.log("Posts gotten from this user: "+response.data.children.length)
                 for (var i in response.data.children) {
                     var comment = response.data.children[i];
                     if (comment.data.subreddit.toLowerCase() != subreddit_to_analyze.toLowerCase() && // the subreddit we're analyzing now
@@ -329,8 +322,8 @@ var analyzeSubreddit = function(subreddit) {
                 // (this will indirectly call the other processing stages,
                 // which are collectSubreddits() and crunchNumbers)
                 // $("#info-header").show();
-                console.log(response.data.subscribers); // subs range from 0 to ~20m
-                $("#info-header-subs").html(" ("+response.data.subscribers+" subscribers)");
+                // console.log(response.data.subscribers); // subs range from 0 to ~20m
+                $("#info-header-subs").html(" ("+numeral( response.data.subscribers ).format('0,0')+" subscribers)");
                 collectUsers(subreddit);
             }
         },
@@ -361,7 +354,6 @@ var analyzeBtn = function() {
     all_data = {};
     condensed_subreddit_data = {};
     sorted_subs = [];
-    console.log(sorted_subs);
     pending_async_comment_calls = pending_async_user_calls = pending_async_about_calls = 0;
     analyzeSubreddit($("#subreddit-input").val());
 }
